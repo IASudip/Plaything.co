@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:plaything/core/app_export.dart';
 
 class MusicModeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MusicModeAppBar({super.key});
+  final TabController? controller;
+  const MusicModeAppBar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -24,22 +25,53 @@ class MusicModeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         title: const Text('Music'),
         bottom: TabBar(
+          isScrollable: true,
+          controller: controller,
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorPadding: EdgeInsets.symmetric(
-              horizontal: 20.customWidth, vertical: 8.customHeight),
+            horizontal: 16.customWidth,
+            vertical: 10.customHeight,
+          ),
           indicator: BoxDecoration(
-            // color: Colors.amber,
-            borderRadius: BorderRadius.circular(100.0.customWidth),
+            color: appTheme.orange50,
+            borderRadius: BorderRadius.circular(30.0.customWidth),
             border: Border.all(color: appTheme.orange50),
           ),
+          splashBorderRadius: BorderRadius.circular(30.0.customWidth),
           labelColor: appTheme.gray80001,
           labelStyle: theme.textTheme.labelMedium,
-          tabs: const [
+          tabs: [
             Tab(
-              text: 'My Library',
+              child: Container(
+                height: 30.customHeight,
+                width: 103.customWidth,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0.customWidth),
+                  border: Border.all(
+                    width: 1.0,
+                    color: appTheme.orange50,
+                  ),
+                ),
+                child: const Text('My Library'),
+              ),
             ),
             Tab(
-              text: 'Playlist',
+              child: Container(
+                height: 30.customHeight,
+                width: 103.customWidth,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    100.0.customWidth,
+                  ),
+                  border: Border.all(
+                    width: 1.0,
+                    color: appTheme.orange50,
+                  ),
+                ),
+                child: const Text('Playlist'),
+              ),
             ),
           ],
         ),

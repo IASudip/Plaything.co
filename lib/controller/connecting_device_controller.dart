@@ -14,7 +14,7 @@ class ConnectingDeviceController extends GetxController {
   final String _uuidService = "0000FFE5-0000-1000-8000-00805f9b34fb";
   final String _uuidRead = "0000FFE2-0000-1000-8000-00805f9b34fb";
   final String _uuidWrite = "0000FFE9-0000-1000-8000-00805f9b34fb";
-  // final String _uuidYaliBNotify = "0000FFE3-0000-1000-8000-00805f9b34fb";
+  final String _uuidYaliBNotify = "0000FFE3-0000-1000-8000-00805f9b34fb";
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<ScanResult> deviceList = [];
@@ -256,55 +256,75 @@ class ConnectingDeviceController extends GetxController {
             if (characteristic.properties.write) {
               Get.offAllNamed(AppRoute.mode);
             }
-          }
-
-          if (characteristic.uuid.toString() == _uuidRead.toString()) {
-            List<String> splitUUID = characteristic.uuid.toString().split('-');
-            String firstPart = splitUUID[0];
-            String finalUUID = firstPart.replaceAll("0000", "");
-            if (finalUUID == "FFE2") {
-              globals.readCharacteristic = characteristic;
-              return;
-            }
-            return;
-          }
-
-          /*else if (characteristic.uuid.toString() ==
+          } else if (characteristic.uuid.toString() ==
               Guid(_uuidRead).toString()) {
             globals.readCharacteristic = characteristic;
-            debugPrint(
-                "---->>>Globals ReadCharacteristic: ${globals.readCharacteristic!.value.first}<<<----");
+            await globals.readCharacteristic!.read();
 
-            globals.readCharacteristic!.value.listen((List<int> resultByte) {
-              if (resultByte[1] == 0x0 && resultByte[2] == 0x00) {
-                int batteryLevel = resultByte[0] & 0xff;
-                debugPrint("Your device battery Level is $batteryLevel");
-              } else if ((resultByte[2] & 0xff) == 0x40) {
-                int productMode = (resultByte[3] & 0xff);
-                debugPrint("Your device battery Level is $productMode");
-              }
-            });
+            debugPrint(
+                "---->>>Globals ReadCharacteristic UUID: ${globals.readCharacteristic!.uuid}<<<----");
+
+            globals.readCharacteristic!.value.listen(
+              (List<int> resultByte) {
+                debugPrint("::::: ::Result Byte: $resultByte ::::: ::");
+                if (resultByte[1] == 0x0 && resultByte[2] == 0x0) {
+                  int batteryLevel = resultByte[0] & 0xff;
+                  debugPrint("Your device battery Level is $batteryLevel");
+                } else if ((resultByte[2] & 0xff) == 0x40) {
+                  int productMode = (resultByte[3] & 0xff);
+                  debugPrint("Your device battery Level is $productMode");
+                }
+              },
+            );
           } else if (characteristic.uuid.toString() ==
               Guid(_uuidYaliBNotify).toString()) {
             globals.yaliCharacteristic = characteristic;
           } else {
             debugPrint("---->>>No match found<<<----");
-          }*/
+          }
         }
       }
     }
   }
 
-  Future<void> onCharacteristicRead(
-      BluetoothCharacteristic characteristic) async {
-    characteristic.value.listen((List<int> resultByte) {
-      debugPrint("Battery: $resultByte");
-    });
+  Future<void> readBatteryMessage() async {
+    if (globals.writeCharacteristic != null) {
+      List<int> bytes = [
+        'V'.codeUnitAt(0),
+        '0'.codeUnitAt(0),
+        'L'.codeUnitAt(0),
+        'T'.codeUnitAt(0),
+      ];
+      Uint8List data = Uint8List.fromList(bytes);
+      if (globals.readCharacteristic!.properties.writeWithoutResponse) {
+        globals.readCharacteristic!.write(data);
+      } else {
+        globals.readCharacteristic!.write(data, withoutResponse: false);
+      }
+    }
   }
 
-  Future<void> sendData(BluetoothCharacteristic? c, Uint8List bytes) async {
+  Future<void> readProductMessage() async {
+    if (globals.writeCharacteristic != null) {
+      List<int> bytes = [
+        'W'.codeUnitAt(0),
+        'N'.codeUnitAt(0),
+        'D'.codeUnitAt(0),
+        'S'.codeUnitAt(0),
+      ];
+      Uint8List data = Uint8List.fromList(bytes);
+      if (globals.readCharacteristic!.properties.writeWithoutResponse) {
+        globals.readCharacteristic!.write(data);
+      } else {
+        globals.readCharacteristic!.write(data, withoutResponse: false);
+      }
+    }
+  }
+
+  Future<void> sendData(
+      BluetoothCharacteristic? charateristic, Uint8List bytes) async {
     try {
-      await c!.write(
+      await charateristic!.write(
         bytes,
       );
       debugPrint("---:::::Bytes: $bytes:::::-------");

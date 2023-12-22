@@ -20,6 +20,8 @@ class ImagePath {
   static String swingWave = 'assets/images/swing_wave.svg';
 
   static String musicMode = 'assets/images/mode_music.svg';
+  static String playIcon = 'assets/images/play_button.svg';
+  static String heartIcon = 'assets/images/heart_button.svg';
 
   static String freeMode = 'assets/images/mode_free.svg';
   static String battery = 'assets/images/battery_icon.svg';

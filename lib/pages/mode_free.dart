@@ -4,18 +4,16 @@ import 'dart:typed_data';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
 import 'package:plaything/core/utlis/shared_pref.dart';
 import 'package:plaything/widgets/appbar/title_appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:plaything/core/global.dart' as globals;
 
 class FreeModePage extends StatefulWidget {
-  final BluetoothCharacteristic? bluetoothCharacteristic;
   const FreeModePage({
     super.key,
-    this.bluetoothCharacteristic,
   });
 
   @override
@@ -216,7 +214,7 @@ class _FreeModePageState extends State<FreeModePage> {
                             final byteData =
                                 Uint8List.fromList(freeModeRoute[i]);
                             await _connectingDeviceController.sendData(
-                              widget.bluetoothCharacteristic,
+                              globals.writeCharacteristic,
                               byteData,
                             );
                           }
@@ -225,7 +223,6 @@ class _FreeModePageState extends State<FreeModePage> {
                       onPanUpdate: (details) {
                         left = max(0, left + details.delta.dx);
                         top = max(0, top + details.delta.dy);
-                        debugPrint('--->>>Top::$top<<<----');
 
                         setState(() {});
                         if (top > 0) {
@@ -240,7 +237,7 @@ class _FreeModePageState extends State<FreeModePage> {
 
                           final byteData = Uint8List.fromList(getPoints);
                           _connectingDeviceController.sendData(
-                            widget.bluetoothCharacteristic,
+                            globals.writeCharacteristic,
                             byteData,
                           );
 
@@ -309,7 +306,7 @@ class _FreeModePageState extends State<FreeModePage> {
     int previousValue = 0;
 
     for (int i = 0; i < numberOfLists; i++) {
-      int randomValue = ((Random().nextInt(150) + 20) ~/ 10).toInt();
+      int randomValue = (Random().nextInt(15) + 2).toInt();
       int firstValue = previousValue + 2;
       List<int> innerList = [firstValue, randomValue];
       result.add(innerList);

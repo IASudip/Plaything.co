@@ -28,7 +28,7 @@ class _PatternModePageState extends State<PatternModePage> {
     List<PatternDetails> patternDetail = [
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 3]);
+          Uint8List byteData = Uint8List.fromList([0x0, 10]);
 
           _connectingDeviceController.sendData(
               globals.writeCharacteristic, byteData);
@@ -38,7 +38,7 @@ class _PatternModePageState extends State<PatternModePage> {
       ),
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 4]);
+          Uint8List byteData = Uint8List.fromList([0x0, 12]);
 
           _connectingDeviceController.sendData(
               globals.writeCharacteristic, byteData);
@@ -96,7 +96,7 @@ class _PatternModePageState extends State<PatternModePage> {
       floatingActionButton: FloatingActionButton.small(
         backgroundColor: appTheme.gray80001,
         onPressed: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 0x0]);
+          Uint8List byteData = Uint8List.fromList([0x0, 0]);
           _connectingDeviceController.sendData(
               globals.writeCharacteristic, byteData);
         },

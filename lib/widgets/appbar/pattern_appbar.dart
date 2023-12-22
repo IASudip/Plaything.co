@@ -20,7 +20,7 @@ class PatternAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         leading: InkWell(
           onTap: () {
-            Uint8List byteData = Uint8List.fromList([0x0, 00]);
+            Uint8List byteData = Uint8List.fromList([0x0, 0]);
             _connectingDeviceController.sendData(
               globals.writeCharacteristic,
               byteData,
