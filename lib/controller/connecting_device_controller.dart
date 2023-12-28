@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bluetooth_enable_fork/bluetooth_enable_fork.dart';
@@ -9,7 +10,7 @@ import 'package:plaything/core/app_export.dart';
 import 'package:plaything/core/global.dart' as globals;
 
 class ConnectingDeviceController extends GetxController {
-  bool isScanningBLE = false;
+  RxBool isScanningBLE = false.obs;
 
   final String _uuidService = "0000FFE5-0000-1000-8000-00805f9b34fb";
   final String _uuidRead = "0000FFE2-0000-1000-8000-00805f9b34fb";
@@ -17,9 +18,9 @@ class ConnectingDeviceController extends GetxController {
   final String _uuidYaliBNotify = "0000FFE3-0000-1000-8000-00805f9b34fb";
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
-  List<ScanResult> deviceList = [];
+  List<ScanResult> deviceList = <ScanResult>[].obs;
   BluetoothDevice? connectedDevice;
-  RxString bleState = "Loading...".obs;
+  RxInt batteryLevel = 0.obs;
 
   Future<bool> isBluetoothOn() async {
     bool isFbleOn = await Permission.bluetooth.serviceStatus.isEnabled;
@@ -94,6 +95,11 @@ class ConnectingDeviceController extends GetxController {
   Future<void> isReqdPermissionGranted() async {
     debugPrint("----->>>>>Initial Permissions Started<<<<<-------");
 
+    Map<Permission, PermissionStatus> fileManagerStatus =
+        await [Permission.storage].request();
+    debugPrint(
+        "----->>>>>File Manager Permissions: $fileManagerStatus<<<<<-------");
+
     bool locStatus = await Permission.location.request().isGranted;
     debugPrint("----->>>>>Location Scan Permissions: $locStatus<<<<<-------");
 
@@ -119,7 +125,7 @@ class ConnectingDeviceController extends GetxController {
   }
 
   Future<void> startBleDeviceScan() async {
-    isScanningBLE = true;
+    isScanningBLE.value = true;
     deviceList.clear();
 
     if (await isBluetoothOn()) {
@@ -150,36 +156,38 @@ class ConnectingDeviceController extends GetxController {
       //   }
       // });
 
-      flutterBlue.scanResults.listen((List<ScanResult> results) {
-        for (ScanResult result in results) {
-          int findIndex = deviceList.indexWhere(
-            (element) => (element.device.id.id == result.device.id.id),
-          );
+      flutterBlue.scanResults.listen(
+        (List<ScanResult> results) {
+          for (ScanResult result in results) {
+            int findIndex = deviceList.indexWhere(
+              (element) => (element.device.id.id == result.device.id.id),
+            );
 
-          String bleName = result.device.name;
-          if (findIndex == -1 && bleName.startsWith('Aogu')) {
-            deviceList.add(result);
-            debugPrint("------->>>>Device name: ${result.device}<<<<<------");
-            stopScanBluetooth();
+            String bleName = result.device.name;
+            if (findIndex == -1 && bleName.startsWith('Aogu')) {
+              deviceList.add(result);
+              debugPrint("------->>>>Device name: ${result.device}<<<<<------");
+              stopScanBluetooth();
+            }
           }
-        }
-      });
+        },
+      );
     }
   }
 
   Future<void> stopScanBluetooth() async {
     debugPrint("------>>Is Scanning: ${isScanningBLE.toString()}");
-    if (isScanningBLE) {
+    if (isScanningBLE.isTrue) {
       flutterBlue.stopScan();
     }
-    isScanningBLE = false;
+    isScanningBLE.value = false;
     debugPrint("------->>>>Scanning has been Stopped<<<<<------");
   }
 
   Future<void> connectDevice(BluetoothDevice device) async {
-    if (isScanningBLE == true) {
+    if (isScanningBLE.isTrue) {
       flutterBlue.stopScan();
-      isScanningBLE = false;
+      isScanningBLE.value = false;
     }
     List<BluetoothDevice> arrConnectedDevice =
         await FlutterBlue.instance.connectedDevices;
@@ -196,7 +204,7 @@ class ConnectingDeviceController extends GetxController {
         device.state.listen(
           (BluetoothDeviceState state) {
             if (state == BluetoothDeviceState.connecting) {
-              bleState.value = "Connecting";
+              globals.deviceState = "Connecting";
               debugPrint("---->>>Device is ${state.name}<<<<----");
               Get.defaultDialog(
                 content: const Center(
@@ -207,11 +215,12 @@ class ConnectingDeviceController extends GetxController {
               );
               return;
             } else if (state == BluetoothDeviceState.connected) {
+              globals.deviceState = "Connected";
               debugPrint("-------->>>>>>Device is ${state.name}<<<<----------");
               onDiscoveringServices(device);
               return;
             } else if (state == BluetoothDeviceState.disconnected) {
-              bleState.value = "Disconnected";
+              globals.deviceState = "Disconnected";
               debugPrint('--->>Device is ${state.name}<<---');
               Get.defaultDialog(
                 backgroundColor: appTheme.gray80001,
@@ -261,21 +270,21 @@ class ConnectingDeviceController extends GetxController {
             globals.readCharacteristic = characteristic;
             await globals.readCharacteristic!.read();
 
-            debugPrint(
-                "---->>>Globals ReadCharacteristic UUID: ${globals.readCharacteristic!.uuid}<<<----");
-
             globals.readCharacteristic!.value.listen(
-              (List<int> resultByte) {
-                debugPrint("::::: ::Result Byte: $resultByte ::::: ::");
-                if (resultByte[1] == 0x0 && resultByte[2] == 0x0) {
-                  int batteryLevel = resultByte[0] & 0xff;
+              (List<int> resultList) {
+                debugPrint("----->>> $resultList<<<----");
+                if (resultList[1] == 0x0 && resultList[2] == 0x0) {
+                  batteryLevel.value = resultList[0] & 0xff;
                   debugPrint("Your device battery Level is $batteryLevel");
-                } else if ((resultByte[2] & 0xff) == 0x40) {
-                  int productMode = (resultByte[3] & 0xff);
+                } else if ((resultList[2] & 0xff) == 0xff) {
+                  int productMode = (resultList[3] & 0xff);
                   debugPrint("Your device battery Level is $productMode");
+                } else {
+                  debugPrint("----->>>Line 280: No match Found <<<<------");
                 }
               },
             );
+            readBatteryMessage();
           } else if (characteristic.uuid.toString() ==
               Guid(_uuidYaliBNotify).toString()) {
             globals.yaliCharacteristic = characteristic;
@@ -289,17 +298,12 @@ class ConnectingDeviceController extends GetxController {
 
   Future<void> readBatteryMessage() async {
     if (globals.writeCharacteristic != null) {
-      List<int> bytes = [
-        'V'.codeUnitAt(0),
-        '0'.codeUnitAt(0),
-        'L'.codeUnitAt(0),
-        'T'.codeUnitAt(0),
-      ];
-      Uint8List data = Uint8List.fromList(bytes);
+      String strVolt = "VOLT";
+      List<int> bytes = utf8.encode(strVolt);
       if (globals.readCharacteristic!.properties.writeWithoutResponse) {
-        globals.readCharacteristic!.write(data);
+        globals.readCharacteristic!.write(bytes, withoutResponse: true);
       } else {
-        globals.readCharacteristic!.write(data, withoutResponse: false);
+        globals.readCharacteristic!.write(bytes, withoutResponse: false);
       }
     }
   }
@@ -321,10 +325,9 @@ class ConnectingDeviceController extends GetxController {
     }
   }
 
-  Future<void> sendData(
-      BluetoothCharacteristic? charateristic, Uint8List bytes) async {
+  Future<void> sendData(Uint8List bytes) async {
     try {
-      await charateristic!.write(
+      await globals.writeCharacteristic!.write(
         bytes,
       );
       debugPrint("---:::::Bytes: $bytes:::::-------");

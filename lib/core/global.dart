@@ -6,3 +6,4 @@ BluetoothCharacteristic? writeCharacteristic;
 BluetoothCharacteristic? readCharacteristic;
 BluetoothCharacteristic? yaliCharacteristic;
 BluetoothCharacteristic? notifyChracteristic;
+String deviceState = "Loading...";

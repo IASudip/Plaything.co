@@ -19,8 +19,8 @@ class _SettingPageState extends State<SettingPage> {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: const TitleAppBar(
-        title: Text('Setting'),
+      appBar: TitleAppBar(
+        title: const Text('Setting'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const Text('Plaything.co'),

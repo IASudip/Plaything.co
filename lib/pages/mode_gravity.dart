@@ -47,8 +47,8 @@ class _GravityModePageState extends State<GravityModePage>
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: const TitleAppBar(
-        title: Text('Gravity'),
+      appBar: TitleAppBar(
+        title: const Text('Gravity'),
         automaticallyImplyLeading: true,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -49,8 +49,8 @@ class _VoiceControlPageState extends State<VoiceControlPage>
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: const TitleAppBar(
-        title: Text('Voice'),
+      appBar: TitleAppBar(
+        title: const Text('Voice'),
         automaticallyImplyLeading: true,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

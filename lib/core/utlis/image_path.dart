@@ -1,8 +1,8 @@
 class ImagePath {
   static String splashScreenLogo = 'assets/images/plaything.svg';
   static String appbarLogo = 'assets/images/appbar_logo.png';
-  static String privacyPolicyWallpaper =
-      'assets/images/privacy_policy_wallpaper.svg';
+  static String playthingCo = 'assets/images/plaything_co.svg';
+  static String privacyCard = 'assets/images/privacy_card.svg';
 
   static String backArrow = 'assets/images/back_arrow.svg';
   static String getStartedArrow = 'assets/images/get_started.svg';
@@ -26,6 +26,9 @@ class ImagePath {
   static String freeMode = 'assets/images/mode_free.svg';
   static String battery = 'assets/images/battery_icon.svg';
   static String freeModePadLines = 'assets/images/mode_free_pad_lines.svg';
+
+  static String vibrationProgressbar =
+      'assets/images/vibration_progress_bar.svg';
 
   static String gravityMode = 'assets/images/mode_gravity.svg';
   static String chatMode = 'assets/images/mode_chat.svg';

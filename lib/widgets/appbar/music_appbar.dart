@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
 
 class MusicModeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController? controller;
-  const MusicModeAppBar({super.key, required this.controller});
+  MusicModeAppBar({super.key, required this.controller});
+
+  final ConnectingDeviceController connectingDeviceController =
+      Get.put(ConnectingDeviceController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,28 @@ class MusicModeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         title: const Text('Music'),
+        actions: [
+          Row(
+            children: [
+              SvgPicture.asset(ImagePath.battery),
+              Padding(
+                padding: EdgeInsets.only(
+                  right: 20.customWidth,
+                  left: 10.customWidth,
+                ),
+                child: Text(
+                  connectingDeviceController.batteryLevel.value.toString(),
+                  style: TextStyle(
+                    color: theme.textTheme.bodySmall!.color,
+                    fontSize: theme.textTheme.labelMedium!.fontSize,
+                    fontWeight: theme.textTheme.labelMedium!.fontWeight,
+                    fontFamily: theme.textTheme.bodySmall!.fontFamily,
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
         bottom: TabBar(
           isScrollable: true,
           controller: controller,

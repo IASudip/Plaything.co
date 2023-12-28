@@ -10,18 +10,22 @@ class ModeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: AppBar(
-        title: Padding(
-          padding:
-              EdgeInsets.only(left: 20.0.customWidth, top: 20.0.customHeight),
-          child: SvgPicture.asset(
-            ImagePath.splashScreenLogo,
-            width: 24.68.customWidth,
-            height: 35.customHeight,
+        title: InkWell(
+          onTap: () => Get.toNamed(AppRoute.setting),
+          child: Padding(
+            padding:
+                EdgeInsets.only(left: 20.0.customWidth, top: 20.0.customHeight),
+            child: SvgPicture.asset(
+              ImagePath.splashScreenLogo,
+              width: 24.68.customWidth,
+              height: 35.customHeight,
+            ),
           ),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(top: 20.0, right: 20.0),
+            padding: EdgeInsets.only(
+                top: 20.0.customHeight, right: 20.0.customWidth),
             child: NeumorphismButton(
               onTap: () => Get.toNamed(AppRoute.connectDevice),
               height: 40.customHeight,

@@ -51,11 +51,6 @@ class _ModePageState extends State<ModePage> {
         icon: ImagePath.chatMode,
         onTap: () => Get.toNamed(AppRoute.chatMode),
       ),
-      ModeType(
-        mode: 'Setting',
-        icon: ImagePath.bluetooth,
-        onTap: () => Get.toNamed(AppRoute.setting),
-      ),
     ];
 
     double height = MediaQuery.sizeOf(context).height;

@@ -128,12 +128,26 @@ class ThemeHelper {
         ),
       ),
       sliderTheme: SliderThemeData(
-        trackHeight: 8.0.customHeight,
+        trackHeight: 10.0.customHeight,
         overlayShape: SliderComponentShape.noThumb,
         tickMarkShape: SliderTickMarkShape.noTickMark,
         activeTrackColor: appTheme.gray700,
         inactiveTrackColor: appTheme.gray800,
         thumbColor: appTheme.gray90001,
+      ),
+      listTileTheme: ListTileThemeData(
+        titleTextStyle: TextStyle(
+          color: appTheme.orange50,
+          fontSize: 14.fSize,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400,
+        ),
+        subtitleTextStyle: TextStyle(
+          color: appTheme.orange50,
+          fontSize: 10.fSize,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }

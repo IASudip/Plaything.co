@@ -6,7 +6,7 @@ import 'package:plaything/pages/mode_chat.dart';
 import 'package:plaything/pages/mode_free.dart';
 import 'package:plaything/pages/mode_gravity.dart';
 import 'package:plaything/pages/mode_longdistance.dart';
-import 'package:plaything/pages/mode_music.dart';
+import 'package:plaything/pages/mode_music/mode_music.dart';
 import 'package:plaything/pages/mode_page.dart';
 import 'package:plaything/pages/mode_pattern.dart';
 import 'package:plaything/pages/mode_voice_control.dart';

@@ -10,7 +10,7 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 3), () async {
@@ -24,6 +24,7 @@ class _SplashPageState extends State<SplashPage> {
         return;
       }
     });
+
     super.initState();
   }
 
@@ -32,8 +33,6 @@ class _SplashPageState extends State<SplashPage> {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
       body: Container(
         width: width,
         height: height,
@@ -50,9 +49,7 @@ class _SplashPageState extends State<SplashPage> {
             ],
           ),
         ),
-        child: SvgPicture.asset(
-          ImagePath.splashScreenLogo,
-        ),
+        child: SvgPicture.asset(ImagePath.splashScreenLogo),
       ),
     );
   }

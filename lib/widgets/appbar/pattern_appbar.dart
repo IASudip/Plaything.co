@@ -11,85 +11,42 @@ class PatternAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(75);
 
   final ConnectingDeviceController _connectingDeviceController =
-      Get.put(ConnectingDeviceController());
+      Get.find<ConnectingDeviceController>();
 
   @override
   Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: preferredSize,
-      child: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Uint8List byteData = Uint8List.fromList([0x0, 0]);
-            _connectingDeviceController.sendData(
-              globals.writeCharacteristic,
-              byteData,
-            );
-            Get.back();
-          },
-          child: Container(
-            height: 19.customHeight,
-            width: 15.customWidth,
-            alignment: Alignment.center,
-            child: SvgPicture.asset(
-              ImagePath.backArrow,
+    return Obx(() {
+      return PreferredSize(
+        preferredSize: preferredSize,
+        child: AppBar(
+          leading: InkWell(
+            onTap: () {
+              Uint8List byteData = Uint8List.fromList([0x0, 255]);
+              _connectingDeviceController.sendData(
+                byteData,
+              );
+              Get.back();
+            },
+            child: Container(
               height: 19.customHeight,
-              width: 11.customWidth,
+              width: 15.customWidth,
+              alignment: Alignment.center,
+              child: SvgPicture.asset(
+                ImagePath.backArrow,
+                height: 19.customHeight,
+                width: 11.customWidth,
+              ),
             ),
           ),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0.customWidth),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Status',
-                  style: TextStyle(
-                    color: theme.textTheme.bodySmall!.color,
-                    fontSize: theme.textTheme.bodySmall!.fontSize,
-                    fontWeight: theme.textTheme.titleMedium!.fontWeight,
-                    fontFamily: theme.textTheme.bodySmall!.fontFamily,
-                  ),
-                ),
-                RichText(
-                  text: TextSpan(children: [
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: SvgPicture.asset(
-                        width: 23.0.customWidth,
-                        height: 10.0.customHeight,
-                        ImagePath.battery,
-                      ),
-                    ),
-                    WidgetSpan(
-                      child: SizedBox(
-                        width: 5.0.customWidth,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '50%',
-                      style: TextStyle(
-                        color: theme.textTheme.bodySmall!.color,
-                        fontSize: theme.textTheme.labelMedium!.fontSize,
-                        fontWeight: theme.textTheme.labelMedium!.fontWeight,
-                        fontFamily: theme.textTheme.bodySmall!.fontFamily,
-                      ),
-                    )
-                  ]),
-                ),
-                Container(
-                  width: 70.customWidth,
-                  height: 15.customHeight,
-                  padding: EdgeInsets.symmetric(horizontal: 8.0.customWidth),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: appTheme.red20002,
-                  ),
-                  child: Text(
-                    "Connected",
+          actions: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0.customWidth),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Status',
                     style: TextStyle(
                       color: theme.textTheme.bodySmall!.color,
                       fontSize: theme.textTheme.bodySmall!.fontSize,
@@ -97,13 +54,58 @@ class PatternAppBar extends StatelessWidget implements PreferredSizeWidget {
                       fontFamily: theme.textTheme.bodySmall!.fontFamily,
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
-        title: const Text('Pattern'),
-      ),
-    );
+                  RichText(
+                    text: TextSpan(children: [
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: SvgPicture.asset(
+                          width: 23.0.customWidth,
+                          height: 10.0.customHeight,
+                          ImagePath.battery,
+                        ),
+                      ),
+                      WidgetSpan(
+                        child: SizedBox(
+                          width: 5.0.customWidth,
+                        ),
+                      ),
+                      TextSpan(
+                        text:
+                            _connectingDeviceController.batteryLevel.toString(),
+                        style: TextStyle(
+                          color: theme.textTheme.bodySmall!.color,
+                          fontSize: theme.textTheme.labelMedium!.fontSize,
+                          fontWeight: theme.textTheme.labelMedium!.fontWeight,
+                          fontFamily: theme.textTheme.bodySmall!.fontFamily,
+                        ),
+                      )
+                    ]),
+                  ),
+                  Container(
+                    width: 70.customWidth,
+                    height: 15.customHeight,
+                    padding: EdgeInsets.symmetric(horizontal: 8.0.customWidth),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: appTheme.red20002,
+                    ),
+                    child: Text(
+                      globals.deviceState,
+                      style: TextStyle(
+                        color: theme.textTheme.bodySmall!.color,
+                        fontSize: theme.textTheme.bodySmall!.fontSize,
+                        fontWeight: theme.textTheme.titleMedium!.fontWeight,
+                        fontFamily: theme.textTheme.bodySmall!.fontFamily,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+          title: const Text('Pattern'),
+        ),
+      );
+    });
   }
 }

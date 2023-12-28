@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
 import 'package:plaything/widgets/appbar/pattern_appbar.dart';
-import 'package:plaything/core/global.dart' as globals;
 
 class PatternModePage extends StatefulWidget {
   const PatternModePage({super.key});
@@ -14,11 +13,8 @@ class PatternModePage extends StatefulWidget {
 }
 
 class _PatternModePageState extends State<PatternModePage> {
-  double _speed = 1.0;
-  double _strength = 0.0;
-
   final ConnectingDeviceController _connectingDeviceController =
-      ConnectingDeviceController();
+      Get.put(ConnectingDeviceController());
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +24,9 @@ class _PatternModePageState extends State<PatternModePage> {
     List<PatternDetails> patternDetail = [
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 10]);
+          Uint8List byteData = Uint8List.fromList([0, 10]);
 
-          _connectingDeviceController.sendData(
-              globals.writeCharacteristic, byteData);
+          _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.shockWave,
         name: "Shock Wave",
@@ -40,8 +35,7 @@ class _PatternModePageState extends State<PatternModePage> {
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x0, 12]);
 
-          _connectingDeviceController.sendData(
-              globals.writeCharacteristic, byteData);
+          _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.lightningWave,
         name: "Lightning",
@@ -50,8 +44,7 @@ class _PatternModePageState extends State<PatternModePage> {
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x0, 5]);
 
-          _connectingDeviceController.sendData(
-              globals.writeCharacteristic, byteData);
+          _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.parkorWave,
         name: "Parkor",
@@ -60,28 +53,25 @@ class _PatternModePageState extends State<PatternModePage> {
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x0, 7]);
 
-          _connectingDeviceController.sendData(
-              globals.writeCharacteristic, byteData);
+          _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.bangBangWave,
         name: "Bang-Bang",
       ),
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 8]);
+          Uint8List byteData = Uint8List.fromList([0x0, 111]);
 
-          _connectingDeviceController.sendData(
-              globals.writeCharacteristic, byteData);
+          _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.swingWave,
         name: "Swing",
       ),
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 12]);
+          Uint8List byteData = Uint8List.fromList([0x00, 12]);
 
-          _connectingDeviceController.sendData(
-              globals.writeCharacteristic, byteData);
+          _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.bungyWave,
         name: "Bungy",
@@ -96,9 +86,8 @@ class _PatternModePageState extends State<PatternModePage> {
       floatingActionButton: FloatingActionButton.small(
         backgroundColor: appTheme.gray80001,
         onPressed: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 0]);
-          _connectingDeviceController.sendData(
-              globals.writeCharacteristic, byteData);
+          Uint8List byteData = Uint8List.fromList([0x0, 255]);
+          _connectingDeviceController.sendData(byteData);
         },
         child: Icon(
           Icons.stop_rounded,
@@ -133,14 +122,15 @@ class _PatternModePageState extends State<PatternModePage> {
             Column(
               children: [
                 Container(
-                  height: 209.customHeight,
+                  height: 409.customHeight,
                   width: width,
                   margin: EdgeInsets.only(bottom: 30.0.customHeight),
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
+                  decoration: BoxDecoration(
+                    color: appTheme.deepOrange200,
                   ),
                 ),
-                Container(
+
+                /* Container(
                   height: 48.customHeight,
                   width: width,
                   margin: EdgeInsets.symmetric(
@@ -203,8 +193,8 @@ class _PatternModePageState extends State<PatternModePage> {
                                 )),
                       ),
                       Slider(
-                        min: 1.0,
-                        max: 5.0,
+                        min: 195.0,
+                        max: 200.0,
                         divisions: 4,
                         value: _speed,
                         onChanged: (value) {
@@ -215,7 +205,7 @@ class _PatternModePageState extends State<PatternModePage> {
                       ),
                     ],
                   ),
-                ),
+                ),*/
                 SizedBox(
                   height: 250.customHeight,
                   width: width,
