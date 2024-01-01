@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:plaything/controller/mode_music_controller.dart';
 import 'package:plaything/core/app_export.dart';
@@ -24,11 +23,7 @@ class _MusicModePageState extends State<MusicModePage>
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
-
     _musicModeController.getAudio();
-    _musicModeController.player.onPlayerStateChanged.listen((state) {
-      _musicModeController.isPlaying = state == PlayerState.playing;
-    });
   }
 
   @override
@@ -89,7 +84,7 @@ class _MusicModePageState extends State<MusicModePage>
   @override
   void dispose() {
     tabController!.dispose();
-    _musicModeController.player.dispose();
+    _musicModeController.onDestroy();
     super.dispose();
   }
 }

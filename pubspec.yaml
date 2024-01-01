@@ -50,7 +50,9 @@ dependencies:
   flutter_screenutil: ^5.9.0
   on_audio_query: ^2.9.0
   audioplayers: ^5.2.1
+  audio_waveforms: ^1.0.4
   sleek_circular_slider: ^2.0.1
+  sensors_plus: ^4.0.2
 
 dev_dependencies:
   flutter_test:

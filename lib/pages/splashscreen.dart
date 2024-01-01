@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
 import 'package:plaything/core/utlis/shared_pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,8 +12,13 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
+  final ConnectingDeviceController _controller =
+      Get.put(ConnectingDeviceController());
+
   @override
   void initState() {
+    _controller.getPermission();
+
     Future.delayed(const Duration(seconds: 3), () async {
       SharedPreferences pref = await SharedPreferences.getInstance();
       String? check = pref.getString(PrefString.privacyPolicyRead);

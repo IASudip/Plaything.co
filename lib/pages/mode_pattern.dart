@@ -24,7 +24,7 @@ class _PatternModePageState extends State<PatternModePage> {
     List<PatternDetails> patternDetail = [
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0, 10]);
+          Uint8List byteData = Uint8List.fromList([0x0, 4]);
 
           _connectingDeviceController.sendData(byteData);
         },
@@ -33,7 +33,7 @@ class _PatternModePageState extends State<PatternModePage> {
       ),
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 12]);
+          Uint8List byteData = Uint8List.fromList([0x0, 6]);
 
           _connectingDeviceController.sendData(byteData);
         },
@@ -60,8 +60,7 @@ class _PatternModePageState extends State<PatternModePage> {
       ),
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 111]);
-
+          Uint8List byteData = Uint8List.fromList([0x0, 11]);
           _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.swingWave,
@@ -70,7 +69,6 @@ class _PatternModePageState extends State<PatternModePage> {
       PatternDetails(
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x00, 12]);
-
           _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.bungyWave,
@@ -270,6 +268,15 @@ class _PatternModePageState extends State<PatternModePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    Uint8List byteData = Uint8List.fromList([0x0, 255]);
+    _connectingDeviceController.sendData(
+      byteData,
+    );
+    super.dispose();
   }
 }
 

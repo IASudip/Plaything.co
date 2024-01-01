@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
@@ -11,7 +9,7 @@ class PatternAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(75);
 
   final ConnectingDeviceController _connectingDeviceController =
-      Get.find<ConnectingDeviceController>();
+      Get.put(ConnectingDeviceController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +18,7 @@ class PatternAppBar extends StatelessWidget implements PreferredSizeWidget {
         preferredSize: preferredSize,
         child: AppBar(
           leading: InkWell(
-            onTap: () {
-              Uint8List byteData = Uint8List.fromList([0x0, 255]);
-              _connectingDeviceController.sendData(
-                byteData,
-              );
-              Get.back();
-            },
+            onTap: () => Get.back(),
             child: Container(
               height: 19.customHeight,
               width: 15.customWidth,

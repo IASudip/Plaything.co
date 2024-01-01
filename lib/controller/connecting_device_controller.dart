@@ -95,13 +95,13 @@ class ConnectingDeviceController extends GetxController {
   Future<void> isReqdPermissionGranted() async {
     debugPrint("----->>>>>Initial Permissions Started<<<<<-------");
 
+    bool locStatus = await Permission.location.request().isGranted;
+    debugPrint("----->>>>>Location Scan Permissions: $locStatus<<<<<-------");
+
     Map<Permission, PermissionStatus> fileManagerStatus =
         await [Permission.storage].request();
     debugPrint(
         "----->>>>>File Manager Permissions: $fileManagerStatus<<<<<-------");
-
-    bool locStatus = await Permission.location.request().isGranted;
-    debugPrint("----->>>>>Location Scan Permissions: $locStatus<<<<<-------");
 
     bool blueScanStatus = await Permission.bluetoothScan.request().isGranted;
     debugPrint(
@@ -327,9 +327,7 @@ class ConnectingDeviceController extends GetxController {
 
   Future<void> sendData(Uint8List bytes) async {
     try {
-      await globals.writeCharacteristic!.write(
-        bytes,
-      );
+      await globals.writeCharacteristic!.write(bytes, withoutResponse: true);
       debugPrint("---:::::Bytes: $bytes:::::-------");
     } catch (e) {
       debugPrint(":::::::>>>>>>Error While Sending Data: $e<<<<<<::::::::");

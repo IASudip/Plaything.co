@@ -7,9 +7,9 @@ MediaQueryData mediaQuery = MediaQueryData.fromView(
 
 // These are the Viewport values of your Figma Design.
 // These are used in the code as a reference to create your UI Responsively.
-num FIGMA_DESIGN_WIDTH = 390;
-num FIGMA_DESIGN_HEIGHT = 844;
-num FIGMA_DESIGN_STATUS_BAR = 0;
+num figmaDesignWidth = 390;
+num figmaDesignHeight = 844;
+num figmaDesignStatusBar = 0;
 
 ///This extension is used to set padding/margin (for the top and bottom side) & height of the screen or widget according to the Viewport height.
 extension ResponsiveExtension on num {
@@ -27,11 +27,11 @@ extension ResponsiveExtension on num {
   }
 
   ///This method is used to set padding/margin (for the left and Right side) & width of the screen or widget according to the Viewport width.
-  double get customWidth => ((this * _width) / FIGMA_DESIGN_WIDTH);
+  double get customWidth => ((this * _width) / figmaDesignWidth);
 
   ///This method is used to set padding/margin (for the top and bottom side) & height of the screen or widget according to the Viewport height.
   double get customHeight =>
-      (this * _height) / (FIGMA_DESIGN_HEIGHT - FIGMA_DESIGN_STATUS_BAR);
+      (this * _height) / (figmaDesignHeight - figmaDesignStatusBar);
 
   ///This method is used to set smallest px in image height and width
   double get adaptSize {

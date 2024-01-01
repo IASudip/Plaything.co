@@ -24,7 +24,9 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         automaticallyImplyLeading: automaticallyImplyLeading,
         leading: InkWell(
-          onTap: () => Get.back(),
+          onTap: () {
+            Get.back();
+          },
           child: Container(
             height: 25.customHeight,
             width: 25.customWidth,

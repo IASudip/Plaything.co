@@ -28,18 +28,16 @@ class MyLibraryTab extends StatelessWidget {
                   final listAudio = musicModeController.musicFile[index];
 
                   return ListTile(
-                    leading: InkWell(
-                      onTap: () {
-                        musicModeController.playAudio(listAudio);
-                      },
-                      child: CircleAvatar(
-                        radius: 20.customWidth,
-                        backgroundColor: appTheme.gray80001,
-                        child: SvgPicture.asset(
-                          height: 16.customHeight,
-                          width: 16.customWidth,
-                          ImagePath.playIcon,
-                        ),
+                    onTap: () {
+                      musicModeController.playMusic(listAudio);
+                    },
+                    leading: CircleAvatar(
+                      radius: 20.customWidth,
+                      backgroundColor: appTheme.gray80001,
+                      child: SvgPicture.asset(
+                        height: 16.customHeight,
+                        width: 16.customWidth,
+                        ImagePath.playIcon,
                       ),
                     ),
                     title: Text(
