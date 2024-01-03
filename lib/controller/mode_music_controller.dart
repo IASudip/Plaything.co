@@ -72,7 +72,7 @@ class MusicModeController extends GetxController {
       return frameGains[x].toDouble();
     } else {
       if (x == 0) {
-        return (frameGains[0] / 2) + (frameGains[1] / 2);
+        return (frameGains[0] / 2.0) + (frameGains[1] / 2.0);
       } else if (x == (numFrames - 1)) {
         return (frameGains[numFrames - 2] / 2.0) +
             (frameGains[numFrames - 1] / 2.0);
@@ -87,21 +87,33 @@ class MusicModeController extends GetxController {
   Future<void> sendMessage() async {
     debugPrint("----->>>PlayerState: ${playerController.playerState}<<<-----");
     if (playerController.playerState.isInitialised) {
+      PlayerState playerState = PlayerState.stopped;
       int position = 0;
-      playerController.onCurrentDurationChanged.listen((int event) {
+
+      playerController.onCurrentDurationChanged.listen((event) {
         position = event;
       });
-      int total = playerController.maxDuration;
+
+      playerController.onPlayerStateChanged.listen((event) {
+        playerState = event;
+        debugPrint("----->>>Bytes: $playerState<<<------");
+      });
+
+      int total = await playerController.getDuration(DurationType.max);
       double value = getGain(
         (position ~/ (total * 1.0) * audioFrames.length).toInt(),
         audioFrames.length,
         getFrameGain(audioFrames),
       ).toDouble();
-      int sendData = (400 + (value - minGain) / (range * 300)).toInt();
+
+      int sendData = 400 + ((value - minGain) ~/ (range * 300));
       Uint8List bytes = Uint8List.fromList([sendData >> 8, sendData & 0xFF]);
 
-      while (playerController.playerState.isInitialised) {
-        _connectingDeviceController.sendData(bytes);
+      while (!playerState.isPlaying) {
+        debugPrint("----->>>Bytes: $playerState<<<------");
+
+        debugPrint("----->>>Bytes: $bytes<<<------");
+        await _connectingDeviceController.sendData(bytes);
       }
     }
   }
@@ -109,18 +121,18 @@ class MusicModeController extends GetxController {
   Future<void> playMusic(SongModel audioFile) async {
     if (playerController.playerState.isPlaying) {
       await playerController.stopPlayer();
-    } else if (playerController.playerState.isPaused) {
-      playerController.pausePlayer();
     } else {
       playerController.stopAllPlayers();
       await playerController.preparePlayer(path: audioFile.data);
       audioFrames = await playerController
           .extractWaveformData(path: audioFile.data)
-          .whenComplete(() {
-        debugPrint("Extraction has been completed.");
-        playerController.startPlayer();
-        sendMessage();
-      });
+          .whenComplete(
+        () {
+          debugPrint("Extraction has been completed.");
+          playerController.startPlayer();
+          sendMessage();
+        },
+      );
     }
 
     try {
@@ -173,7 +185,7 @@ class MusicModeController extends GetxController {
 
   void onDestroy() async {
     Uint8List bytes = Uint8List.fromList([0x0, 255]);
-    _connectingDeviceController.sendData(bytes);
+    await _connectingDeviceController.sendData(bytes);
     playerController.stopAllPlayers();
     playerController.dispose();
   }

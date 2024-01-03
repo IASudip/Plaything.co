@@ -272,15 +272,15 @@ class ConnectingDeviceController extends GetxController {
 
             globals.readCharacteristic!.value.listen(
               (List<int> resultList) {
-                debugPrint("----->>> $resultList<<<----");
+                // debugPrint("----->>>Result List: $resultList<<<----");
                 if (resultList[1] == 0x0 && resultList[2] == 0x0) {
                   batteryLevel.value = resultList[0] & 0xff;
-                  debugPrint("Your device battery Level is $batteryLevel");
+                  // debugPrint("Your device battery Level is $batteryLevel");
                 } else if ((resultList[2] & 0xff) == 0xff) {
                   int productMode = (resultList[3] & 0xff);
                   debugPrint("Your device battery Level is $productMode");
                 } else {
-                  debugPrint("----->>>Line 280: No match Found <<<<------");
+                  debugPrint("----->>>No match Found <<<<------");
                 }
               },
             );
@@ -327,8 +327,8 @@ class ConnectingDeviceController extends GetxController {
 
   Future<void> sendData(Uint8List bytes) async {
     try {
-      await globals.writeCharacteristic!.write(bytes, withoutResponse: true);
       debugPrint("---:::::Bytes: $bytes:::::-------");
+      await globals.writeCharacteristic!.write(bytes, withoutResponse: true);
     } catch (e) {
       debugPrint(":::::::>>>>>>Error While Sending Data: $e<<<<<<::::::::");
     }

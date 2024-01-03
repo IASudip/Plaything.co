@@ -62,38 +62,39 @@ class _FreeModePageState extends State<FreeModePage> {
                     duration: const Duration(seconds: 60),
                     curve: Curves.easeIn,
                     LineChartData(
-                        minX: 2.0,
-                        maxX: 150,
-                        minY: 0.0,
-                        maxY: 16.0,
-                        borderData: FlBorderData(show: false),
-                        lineTouchData: const LineTouchData(enabled: false),
-                        titlesData: const FlTitlesData(show: false),
-                        gridData: const FlGridData(show: false),
-                        lineBarsData: [
-                          LineChartBarData(
-                            isCurved: true,
-                            dotData: const FlDotData(show: false),
-                            isStrokeCapRound: true,
-                            gradient: LinearGradient(
-                              colors: [
-                                appTheme.gray80001,
-                                appTheme.gray600,
-                              ],
-                            ),
-                            spots: List.generate(
-                                modeFreeController.generatedRoute.length,
-                                (index) {
+                      minX: 2.0,
+                      maxX: 150,
+                      minY: 0.0,
+                      maxY: 16.0,
+                      borderData: FlBorderData(show: false),
+                      lineTouchData: const LineTouchData(enabled: false),
+                      titlesData: const FlTitlesData(show: false),
+                      gridData: const FlGridData(show: false),
+                      lineBarsData: [
+                        LineChartBarData(
+                          isCurved: true,
+                          dotData: const FlDotData(show: false),
+                          isStrokeCapRound: true,
+                          gradient: LinearGradient(
+                            colors: [
+                              appTheme.gray80001,
+                              appTheme.gray600,
+                            ],
+                          ),
+                          spots: List.generate(
+                            modeFreeController.generatedRoute.length,
+                            (index) {
                               var dataSpot =
                                   modeFreeController.generatedRoute[index];
-
                               return FlSpot(
                                 dataSpot[0].toDouble(),
                                 dataSpot[1].toDouble(),
                               );
-                            }),
+                            },
                           ),
-                        ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -107,9 +108,6 @@ class _FreeModePageState extends State<FreeModePage> {
                   ),
                   child: Column(
                     children: [
-                      // FreeModeSlider(
-                      //   value: modeFreeController.intensityValue,
-                      // ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 10.0.customHeight,
@@ -228,50 +226,3 @@ class _FreeModePageState extends State<FreeModePage> {
     });
   }
 }
-
-// ignore: must_be_immutable
-// class FreeModeSlider extends StatefulWidget {
-//   double value;
-//   FreeModeSlider({super.key, required this.value});
-
-//   @override
-//   State<FreeModeSlider> createState() => _FreeModeSliderState();
-// }
-
-// class _FreeModeSliderState extends State<FreeModeSlider> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Padding(
-//           padding: EdgeInsets.symmetric(horizontal: 10.0.customWidth),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Text(
-//                 'Slow',
-//                 style: theme.textTheme.bodySmall,
-//               ),
-//               Text(
-//                 'Fast',
-//                 style: theme.textTheme.bodySmall,
-//               ),
-//             ],
-//           ),
-//         ),
-//         Padding(
-//           padding: EdgeInsets.symmetric(
-//               vertical: 15.0.customHeight, horizontal: 5.0.customWidth),
-//           child: Slider(
-//             value: widget.value,
-//             onChanged: (double v) {
-//               widget.value = v;
-//               setState(() {});
-//               debugPrint(v.toString());
-//             },
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }

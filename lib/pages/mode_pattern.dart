@@ -33,7 +33,7 @@ class _PatternModePageState extends State<PatternModePage> {
       ),
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 6]);
+          Uint8List byteData = Uint8List.fromList([0x0, 3]);
 
           _connectingDeviceController.sendData(byteData);
         },
@@ -60,7 +60,7 @@ class _PatternModePageState extends State<PatternModePage> {
       ),
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x0, 11]);
+          Uint8List byteData = Uint8List.fromList([0x0, 6]);
           _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.swingWave,
@@ -68,7 +68,7 @@ class _PatternModePageState extends State<PatternModePage> {
       ),
       PatternDetails(
         onTap: () {
-          Uint8List byteData = Uint8List.fromList([0x00, 12]);
+          Uint8List byteData = Uint8List.fromList([0x00, 9]);
           _connectingDeviceController.sendData(byteData);
         },
         image: ImagePath.bungyWave,
@@ -123,9 +123,9 @@ class _PatternModePageState extends State<PatternModePage> {
                   height: 409.customHeight,
                   width: width,
                   margin: EdgeInsets.only(bottom: 30.0.customHeight),
-                  decoration: BoxDecoration(
-                    color: appTheme.deepOrange200,
-                  ),
+                  // decoration: BoxDecoration(
+                  //   color: appTheme.deepOrange200,
+                  // ),
                 ),
 
                 /* Container(

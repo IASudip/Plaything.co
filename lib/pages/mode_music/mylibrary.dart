@@ -28,8 +28,8 @@ class MyLibraryTab extends StatelessWidget {
                   final listAudio = musicModeController.musicFile[index];
 
                   return ListTile(
-                    onTap: () {
-                      musicModeController.playMusic(listAudio);
+                    onTap: () async {
+                      await musicModeController.playMusic(listAudio);
                     },
                     leading: CircleAvatar(
                       radius: 20.customWidth,
