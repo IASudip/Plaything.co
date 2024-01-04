@@ -11,6 +11,7 @@ class VoiceControlPage extends StatefulWidget {
 
 class _VoiceControlPageState extends State<VoiceControlPage>
     with TickerProviderStateMixin {
+  late AnimationController _animationController;
   List<double> circleRadius = [
     150.0,
     200.0,
@@ -19,12 +20,9 @@ class _VoiceControlPageState extends State<VoiceControlPage>
     350.0,
   ];
 
-  late AnimationController _animationController;
-
   @override
   void initState() {
     super.initState();
-
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(

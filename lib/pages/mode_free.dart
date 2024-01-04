@@ -4,26 +4,22 @@ import 'package:plaything/controller/mode_free_controller.dart';
 import 'package:plaything/core/app_export.dart';
 import 'package:plaything/widgets/appbar/title_appbar.dart';
 
-class FreeModePage extends StatefulWidget {
-  const FreeModePage({
+class FreeModePage extends StatelessWidget {
+  FreeModePage({
     super.key,
   });
 
-  @override
-  State<FreeModePage> createState() => _FreeModePageState();
-}
-
-class _FreeModePageState extends State<FreeModePage> {
   final FreeModeController modeFreeController = Get.put(FreeModeController());
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
+
     return Obx(() {
       return Scaffold(
-        appBar: TitleAppBar(
-          title: const Text('Free Mode'),
+        appBar: const TitleAppBar(
+          title: Text('Free Mode'),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: const PlayThingFooter(
@@ -62,10 +58,10 @@ class _FreeModePageState extends State<FreeModePage> {
                     duration: const Duration(seconds: 60),
                     curve: Curves.easeIn,
                     LineChartData(
-                      minX: 2.0,
-                      maxX: 150,
+                      minX: 70.0,
+                      maxX: 200,
                       minY: 0.0,
-                      maxY: 16.0,
+                      maxY: 100.0,
                       borderData: FlBorderData(show: false),
                       lineTouchData: const LineTouchData(enabled: false),
                       titlesData: const FlTitlesData(show: false),
@@ -84,11 +80,17 @@ class _FreeModePageState extends State<FreeModePage> {
                           spots: List.generate(
                             modeFreeController.generatedRoute.length,
                             (index) {
-                              var dataSpot =
+                              List<int> graphData =
+                                  modeFreeController.freeModeRoute[index];
+                              debugPrint(
+                                  "Graph Data: ${modeFreeController.freeModeRoute[index]}");
+                              List<int> genData =
                                   modeFreeController.generatedRoute[index];
+                              debugPrint(
+                                  "Gen Data: ${modeFreeController.generatedRoute[index]}");
                               return FlSpot(
-                                dataSpot[0].toDouble(),
-                                dataSpot[1].toDouble(),
+                                genData[0].toDouble(),
+                                graphData[1].toDouble(),
                               );
                             },
                           ),
@@ -175,10 +177,7 @@ class _FreeModePageState extends State<FreeModePage> {
                         onPanEnd: (DragEndDetails details) =>
                             modeFreeController.onDragEnd(),
                         onPanUpdate: (DragUpdateDetails details) =>
-                            modeFreeController.onDragUpdate(
-                          details,
-                          height,
-                        ),
+                            modeFreeController.onDragUpdate(details, height),
                         child: Container(
                           height: 350.customHeight,
                           width: 350.customWidth,

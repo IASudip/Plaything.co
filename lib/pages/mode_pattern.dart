@@ -17,6 +17,12 @@ class _PatternModePageState extends State<PatternModePage> {
       Get.put(ConnectingDeviceController());
 
   @override
+  void initState() {
+    super.initState();
+    _connectingDeviceController.onCharacteristicRead();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
@@ -77,7 +83,7 @@ class _PatternModePageState extends State<PatternModePage> {
     ];
 
     return Scaffold(
-      appBar: PatternAppBar(),
+      appBar: const PatternAppBar(),
       bottomNavigationBar: PlayThingFooter(
         color: appTheme.red30003,
       ),

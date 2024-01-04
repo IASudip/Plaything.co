@@ -63,7 +63,7 @@ class AppRoute {
     ),
     GetPage(
       name: freeMode,
-      page: () => const FreeModePage(),
+      page: () => FreeModePage(),
     ),
     GetPage(
       name: gravityMode,

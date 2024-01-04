@@ -3,11 +3,17 @@ import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
 import 'package:plaything/core/global.dart' as globals;
 
-class PatternAppBar extends StatelessWidget implements PreferredSizeWidget {
-  PatternAppBar({super.key});
+class PatternAppBar extends StatefulWidget implements PreferredSizeWidget {
+  const PatternAppBar({super.key});
+
   @override
   Size get preferredSize => const Size.fromHeight(75);
 
+  @override
+  State<PatternAppBar> createState() => _PatternAppBarState();
+}
+
+class _PatternAppBarState extends State<PatternAppBar> {
   final ConnectingDeviceController _connectingDeviceController =
       Get.put(ConnectingDeviceController());
 
@@ -15,7 +21,7 @@ class PatternAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return PreferredSize(
-        preferredSize: preferredSize,
+        preferredSize: widget.preferredSize,
         child: AppBar(
           leading: InkWell(
             onTap: () => Get.back(),
@@ -63,7 +69,7 @@ class PatternAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                       TextSpan(
                         text:
-                            _connectingDeviceController.batteryLevel.toString(),
+                            "${_connectingDeviceController.batteryLevel.toString()}%",
                         style: TextStyle(
                           color: theme.textTheme.bodySmall!.color,
                           fontSize: theme.textTheme.labelMedium!.fontSize,

@@ -18,15 +18,16 @@ class _LongDistanceModePageState extends State<LongDistanceModePage> {
   double onChangeEnd = 0.0;
   double onChange = 0.0;
 
-  final ConnectingDeviceController connectingDeviceController =
+  final ConnectingDeviceController _connectingDeviceController =
       Get.put(ConnectingDeviceController());
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: TitleAppBar(
-        title: const Text('Long Distance'),
+      appBar: const TitleAppBar(
+        title: Text('Long Distance'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: const PlayThingFooter(),
@@ -100,7 +101,7 @@ class _LongDistanceModePageState extends State<LongDistanceModePage> {
                   onChange: (double value) {
                     Uint8List byteData =
                         Uint8List.fromList([0x0, value.toInt()]);
-                    connectingDeviceController.sendData(
+                    _connectingDeviceController.sendData(
                       byteData,
                     );
                     setState(() {});

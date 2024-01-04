@@ -31,6 +31,7 @@ class _ConnectingDevicePageState extends State<ConnectingDevicePage>
   void initState() {
     super.initState();
 
+    _controller.getPermission();
     _controller.getScannedDevice();
 
     _animationController = AnimationController(

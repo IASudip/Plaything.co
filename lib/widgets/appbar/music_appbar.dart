@@ -2,17 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
 
-class MusicModeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class MusicModeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final TabController? controller;
-  MusicModeAppBar({super.key, required this.controller});
+  const MusicModeAppBar({super.key, required this.controller});
 
+  @override
+  State<MusicModeAppBar> createState() => _MusicModeAppBarState();
+  @override
+  Size get preferredSize => Size.fromHeight(110.customHeight);
+}
+
+class _MusicModeAppBarState extends State<MusicModeAppBar> {
   final ConnectingDeviceController connectingDeviceController =
       Get.put(ConnectingDeviceController());
 
   @override
+  void initState() {
+    super.initState();
+    connectingDeviceController.onCharacteristicRead();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PreferredSize(
-      preferredSize: preferredSize,
+      preferredSize: widget.preferredSize,
       child: AppBar(
         leading: InkWell(
           onTap: () => Get.back(),
@@ -37,22 +50,24 @@ class MusicModeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   right: 20.customWidth,
                   left: 10.customWidth,
                 ),
-                child: Text(
-                  connectingDeviceController.batteryLevel.value.toString(),
-                  style: TextStyle(
-                    color: theme.textTheme.bodySmall!.color,
-                    fontSize: theme.textTheme.labelMedium!.fontSize,
-                    fontWeight: theme.textTheme.labelMedium!.fontWeight,
-                    fontFamily: theme.textTheme.bodySmall!.fontFamily,
-                  ),
-                ),
+                child: Obx(() {
+                  return Text(
+                    "${connectingDeviceController.batteryLevel.value.toString()} %",
+                    style: TextStyle(
+                      color: theme.textTheme.bodySmall!.color,
+                      fontSize: theme.textTheme.labelMedium!.fontSize,
+                      fontWeight: theme.textTheme.labelMedium!.fontWeight,
+                      fontFamily: theme.textTheme.bodySmall!.fontFamily,
+                    ),
+                  );
+                }),
               ),
             ],
           )
         ],
         bottom: TabBar(
           isScrollable: true,
-          controller: controller,
+          controller: widget.controller,
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorPadding: EdgeInsets.symmetric(
             horizontal: 16.customWidth,
@@ -104,7 +119,4 @@ class MusicModeAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(110.customHeight);
 }

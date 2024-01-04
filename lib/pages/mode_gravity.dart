@@ -46,7 +46,6 @@ class _GravityModePageState extends State<GravityModePage>
       debugPrint("---->>>Total: $totalGyro<<<----");
       byteData = Uint8List.fromList([0x0, 205 + totalGyro]);
       _connectingDeviceController.sendData(byteData);
-      // subscription.cancel();
     });
 
     _gravityAnimationController = AnimationController(
@@ -73,8 +72,8 @@ class _GravityModePageState extends State<GravityModePage>
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: TitleAppBar(
-        title: const Text('Gravity'),
+      appBar: const TitleAppBar(
+        title: Text('Gravity'),
         automaticallyImplyLeading: true,
       ),
       bottomNavigationBar: PlayThingFooter(

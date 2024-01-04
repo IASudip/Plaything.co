@@ -87,21 +87,15 @@ class MusicModeController extends GetxController {
   Future<void> sendMessage() async {
     debugPrint("----->>>PlayerState: ${playerController.playerState}<<<-----");
     if (playerController.playerState.isInitialised) {
-      PlayerState playerState = PlayerState.stopped;
       int position = 0;
 
       playerController.onCurrentDurationChanged.listen((event) {
         position = event;
       });
 
-      playerController.onPlayerStateChanged.listen((event) {
-        playerState = event;
-        debugPrint("----->>>Bytes: $playerState<<<------");
-      });
-
       int total = await playerController.getDuration(DurationType.max);
       double value = getGain(
-        (position ~/ (total * 1.0) * audioFrames.length).toInt(),
+        (position ~/ (total * 1.0) * audioFrames.length),
         audioFrames.length,
         getFrameGain(audioFrames),
       ).toDouble();
@@ -109,10 +103,9 @@ class MusicModeController extends GetxController {
       int sendData = 400 + ((value - minGain) ~/ (range * 300));
       Uint8List bytes = Uint8List.fromList([sendData >> 8, sendData & 0xFF]);
 
-      while (!playerState.isPlaying) {
-        debugPrint("----->>>Bytes: $playerState<<<------");
-
-        debugPrint("----->>>Bytes: $bytes<<<------");
+      while (playerController.playerState.isPlaying) {
+        debugPrint(
+            "----->>>Player State: ${playerController.playerState}<<<------");
         await _connectingDeviceController.sendData(bytes);
       }
     }

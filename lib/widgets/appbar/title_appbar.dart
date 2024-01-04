@@ -2,27 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
 
-class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
+class TitleAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget title;
   final bool automaticallyImplyLeading;
-  TitleAppBar({
+  const TitleAppBar({
     super.key,
     required this.title,
     this.automaticallyImplyLeading = false,
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(55.0);
+  State<TitleAppBar> createState() => _TitleAppBarState();
 
+  @override
+  Size get preferredSize => const Size.fromHeight(55.0);
+}
+
+class _TitleAppBarState extends State<TitleAppBar> {
   final ConnectingDeviceController connectingDeviceController =
       Get.put(ConnectingDeviceController());
 
   @override
+  void initState() {
+    super.initState();
+    connectingDeviceController.onCharacteristicRead();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PreferredSize(
-      preferredSize: preferredSize,
+      preferredSize: widget.preferredSize,
       child: AppBar(
-        automaticallyImplyLeading: automaticallyImplyLeading,
+        automaticallyImplyLeading: widget.automaticallyImplyLeading,
         leading: InkWell(
           onTap: () => Get.back(),
           child: Container(
@@ -36,7 +47,7 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
-        title: title,
+        title: widget.title,
         actions: [
           Row(
             children: [
@@ -46,15 +57,17 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
                   right: 20.customWidth,
                   left: 5.customWidth,
                 ),
-                child: Text(
-                  connectingDeviceController.batteryLevel.value.toString(),
-                  style: TextStyle(
-                    color: theme.textTheme.bodySmall!.color,
-                    fontSize: theme.textTheme.labelMedium!.fontSize,
-                    fontWeight: theme.textTheme.labelMedium!.fontWeight,
-                    fontFamily: theme.textTheme.bodySmall!.fontFamily,
-                  ),
-                ),
+                child: Obx(() {
+                  return Text(
+                    "${connectingDeviceController.batteryLevel.value.toString()} %",
+                    style: TextStyle(
+                      color: theme.textTheme.bodySmall!.color,
+                      fontSize: theme.textTheme.labelMedium!.fontSize,
+                      fontWeight: theme.textTheme.labelMedium!.fontWeight,
+                      fontFamily: theme.textTheme.bodySmall!.fontFamily,
+                    ),
+                  );
+                }),
               ),
             ],
           )

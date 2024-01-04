@@ -23,6 +23,7 @@ class _MusicModePageState extends State<MusicModePage>
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+
     _musicModeController.getAudio();
   }
 

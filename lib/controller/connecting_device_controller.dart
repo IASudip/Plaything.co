@@ -48,6 +48,7 @@ class ConnectingDeviceController extends GetxController {
       await showGPSDialog();
     } else {
       startBleDeviceScan();
+      return;
     }
   }
 
@@ -125,15 +126,17 @@ class ConnectingDeviceController extends GetxController {
   }
 
   Future<void> startBleDeviceScan() async {
-    isScanningBLE.value = true;
     deviceList.clear();
-
+    if (isScanningBLE.value = true) {
+      stopScanBLEDevice();
+    }
     if (await isBluetoothOn()) {
       debugPrint("------->>>>>Scanning Started<<<<<--------");
       await flutterBlue.startScan(
         allowDuplicates: false,
       );
     }
+    isScanningBLE.value = true;
   }
 
   Future<void> getScannedDevice() async {
@@ -167,7 +170,7 @@ class ConnectingDeviceController extends GetxController {
             if (findIndex == -1 && bleName.startsWith('Aogu')) {
               deviceList.add(result);
               debugPrint("------->>>>Device name: ${result.device}<<<<<------");
-              stopScanBluetooth();
+              stopScanBLEDevice();
             }
           }
         },
@@ -175,7 +178,7 @@ class ConnectingDeviceController extends GetxController {
     }
   }
 
-  Future<void> stopScanBluetooth() async {
+  Future<void> stopScanBLEDevice() async {
     debugPrint("------>>Is Scanning: ${isScanningBLE.toString()}");
     if (isScanningBLE.isTrue) {
       flutterBlue.stopScan();
@@ -269,22 +272,7 @@ class ConnectingDeviceController extends GetxController {
               Guid(_uuidRead).toString()) {
             globals.readCharacteristic = characteristic;
             await globals.readCharacteristic!.read();
-
-            globals.readCharacteristic!.value.listen(
-              (List<int> resultList) {
-                // debugPrint("----->>>Result List: $resultList<<<----");
-                if (resultList[1] == 0x0 && resultList[2] == 0x0) {
-                  batteryLevel.value = resultList[0] & 0xff;
-                  // debugPrint("Your device battery Level is $batteryLevel");
-                } else if ((resultList[2] & 0xff) == 0xff) {
-                  int productMode = (resultList[3] & 0xff);
-                  debugPrint("Your device battery Level is $productMode");
-                } else {
-                  debugPrint("----->>>No match Found <<<<------");
-                }
-              },
-            );
-            readBatteryMessage();
+            onCharacteristicRead();
           } else if (characteristic.uuid.toString() ==
               Guid(_uuidYaliBNotify).toString()) {
             globals.yaliCharacteristic = characteristic;
@@ -296,10 +284,30 @@ class ConnectingDeviceController extends GetxController {
     }
   }
 
+  onCharacteristicRead() {
+    globals.readCharacteristic!.value.listen(
+      (List<int> resultList) {
+        debugPrint("----->>>Result List: $resultList<<<----");
+        if (resultList[1] == 0x0 && resultList[2] == 0x0) {
+          readBatteryMessage();
+          batteryLevel.value = resultList[0] & 0xff;
+          debugPrint("Your device battery Level is $batteryLevel");
+        } else if ((resultList[2] & 0xff) == 0xff) {
+          int productMode = (resultList[3] & 0xff);
+          debugPrint("Product Mode: $productMode");
+        } else {
+          debugPrint("----->>>No match Found <<<<------");
+        }
+      },
+    );
+  }
+
   Future<void> readBatteryMessage() async {
     if (globals.writeCharacteristic != null) {
       String strVolt = "VOLT";
       List<int> bytes = utf8.encode(strVolt);
+      debugPrint(">>>>>>:::: VOLT: $bytes :::: <<<<");
+
       if (globals.readCharacteristic!.properties.writeWithoutResponse) {
         globals.readCharacteristic!.write(bytes, withoutResponse: true);
       } else {

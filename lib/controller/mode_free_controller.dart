@@ -53,11 +53,9 @@ class FreeModeController extends GetxController {
     debugPrint("-------::::::On Loop started:::::---------");
 
     while (isLoopSelected.value) {
-      for (var i = 0; i < freeModeRoute.length; i++) {
+      for (int i = 0; i < freeModeRoute.length; i++) {
         final byteData = Uint8List.fromList(freeModeRoute[i]);
-        await _connectingDeviceController.sendData(
-          byteData,
-        );
+        await _connectingDeviceController.sendData(byteData);
       }
     }
   }
@@ -67,24 +65,19 @@ class FreeModeController extends GetxController {
     top.value = max(0, top.value + updateDetails.delta.dy);
 
     if (top > 0) {
-      int yAxisValue = (201 + (1 - top / height.customHeight) * 19).toInt();
+      int yAxisValue =
+          (201 + (1 - top.value / height.customHeight) * 19).toInt();
 
-      List<int> getPoints = [(yAxisValue >> 8) & 0xff, yAxisValue & 0xff];
+      List<int> getPoints = [yAxisValue >> 8, yAxisValue & 0xff];
 
       final byteData = Uint8List.fromList(getPoints);
-      _connectingDeviceController.sendData(
-        byteData,
-      );
+      _connectingDeviceController.sendData(byteData);
 
       // Adding data for loop mode
       freeModeRoute.add(getPoints);
 
       // generating route
-      if (generatedRoute.isNotEmpty) {
-        generatedRoute.clear();
-      } else {
-        generatedRoute = generateList(freeModeRoute.length);
-      }
+      generatedRoute = generateList(freeModeRoute.length);
     }
   }
 
@@ -94,9 +87,9 @@ class FreeModeController extends GetxController {
     int previousValue = 0;
 
     for (int i = 0; i < numberOfLists; i++) {
-      int randomValue = (Random().nextInt(15) + 2).toInt();
-      int firstValue = previousValue + 2;
-      List<int> innerList = [firstValue, randomValue];
+      // int randomValue = (Random().nextInt(15) + 2).toInt();
+      int firstValue = previousValue + 1;
+      List<int> innerList = [firstValue];
       result.add(innerList);
 
       previousValue = firstValue;
