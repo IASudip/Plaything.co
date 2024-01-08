@@ -16,8 +16,8 @@ class _ChatModePageState extends State<ChatModePage> {
     double width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
-      appBar: TitleAppBar(
-        title: const Text('Chat'),
+      appBar: const TitleAppBar(
+        title: Text('Chat'),
         automaticallyImplyLeading: true,
       ),
       bottomNavigationBar: PlayThingFooter(

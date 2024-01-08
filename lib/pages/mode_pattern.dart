@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:plaything/controller/connecting_device_controller.dart';
 import 'package:plaything/core/app_export.dart';
@@ -15,6 +15,8 @@ class PatternModePage extends StatefulWidget {
 class _PatternModePageState extends State<PatternModePage> {
   final ConnectingDeviceController _connectingDeviceController =
       Get.put(ConnectingDeviceController());
+
+  double _strength = 110.0;
 
   @override
   void initState() {
@@ -126,15 +128,38 @@ class _PatternModePageState extends State<PatternModePage> {
             Column(
               children: [
                 Container(
-                  height: 409.customHeight,
+                  height: 330.customHeight,
                   width: width,
                   margin: EdgeInsets.only(bottom: 30.0.customHeight),
-                  // decoration: BoxDecoration(
-                  //   color: appTheme.deepOrange200,
-                  // ),
+                  child: LineChart(
+                    LineChartData(
+                        minX: 0,
+                        maxX: 11,
+                        minY: 0,
+                        maxY: 11,
+                        borderData: FlBorderData(show: false),
+                        lineTouchData: const LineTouchData(enabled: false),
+                        titlesData: const FlTitlesData(show: false),
+                        gridData: const FlGridData(show: false),
+                        lineBarsData: [
+                          LineChartBarData(
+                            preventCurveOverShooting: true,
+                            isCurved: true,
+                            curveSmoothness: 0.5,
+                            dotData: const FlDotData(show: false),
+                            isStrokeCapRound: true,
+                            gradient: LinearGradient(
+                              colors: [
+                                appTheme.gray80001,
+                                appTheme.gray600,
+                              ],
+                            ),
+                            spots: patternDesign(6),
+                          )
+                        ]),
+                  ),
                 ),
-
-                /* Container(
+                Container(
                   height: 48.customHeight,
                   width: width,
                   margin: EdgeInsets.symmetric(
@@ -163,17 +188,22 @@ class _PatternModePageState extends State<PatternModePage> {
                         ),
                       ),
                       Slider(
+                        min: 110,
+                        max: 113,
                         value: _strength,
                         onChanged: (value) {
                           _strength = value;
                           debugPrint(_strength.toString());
+                          final Uint8List bytes =
+                              Uint8List.fromList([0x0, _strength.toInt()]);
+                          _connectingDeviceController.sendData(bytes);
                           setState(() {});
                         },
                       ),
                     ],
                   ),
                 ),
-                Container(
+                /* Container(
                   height: 80.customHeight,
                   width: width,
                   margin: EdgeInsets.symmetric(
@@ -214,59 +244,60 @@ class _PatternModePageState extends State<PatternModePage> {
                   height: 250.customHeight,
                   width: width,
                   child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: patternDetail.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        childAspectRatio: 1.0,
-                        mainAxisExtent: 120,
-                        maxCrossAxisExtent: 120,
-                      ),
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: patternDetail[index].onTap,
-                          child: Container(
-                            height: 103.customHeight,
-                            width: 103.customWidth,
-                            margin: const EdgeInsets.all(20),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10.0.customHeight),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    const Color(0XFFE1A990),
-                                    appTheme.red30001,
-                                  ]),
-                              borderRadius:
-                                  BorderRadius.circular(20.0.customWidth),
-                            ),
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: SvgPicture.asset(
-                                    height: 47.customHeight,
-                                    width: 101.customWidth,
-                                    fit: BoxFit.fitWidth,
-                                    patternDetail[index].image,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Text(
-                                      patternDetail[index].name,
-                                      style: theme.textTheme.bodySmall,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                    // physics: const NeverScrollableScrollPhysics(),
+                    itemCount: patternDetail.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      childAspectRatio: 1.0,
+                      mainAxisExtent: 120,
+                      maxCrossAxisExtent: 120,
+                    ),
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: patternDetail[index].onTap,
+                        child: Container(
+                          height: 103.customHeight,
+                          width: 103.customWidth,
+                          margin: const EdgeInsets.all(20),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 10.0.customHeight),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  const Color(0XFFE1A990),
+                                  appTheme.red30001,
+                                ]),
+                            borderRadius:
+                                BorderRadius.circular(20.0.customWidth),
                           ),
-                        );
-                      }),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: SvgPicture.asset(
+                                  height: 47.customHeight,
+                                  width: 101.customWidth,
+                                  fit: BoxFit.fitWidth,
+                                  patternDetail[index].image,
+                                ),
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    patternDetail[index].name,
+                                    style: theme.textTheme.bodySmall,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             )
@@ -283,6 +314,198 @@ class _PatternModePageState extends State<PatternModePage> {
       byteData,
     );
     super.dispose();
+  }
+
+  List<FlSpot> patternDesign(int mode) {
+    switch (mode) {
+      case 1:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 10),
+            FlSpot(3, 1),
+            FlSpot(5, 10),
+            FlSpot(7, 1),
+            FlSpot(9, 10),
+            FlSpot(11, 1),
+          ];
+        }
+
+      case 2:
+        {
+          return const [
+            FlSpot(0, 3),
+            FlSpot(5.5, 9.5),
+            FlSpot(11, 3),
+          ];
+        }
+
+      case 3:
+        {
+          return const [
+            FlSpot(0, 0),
+            FlSpot(1, 2),
+            FlSpot(2, 0),
+            FlSpot(4, 9),
+            FlSpot(6, 1),
+            FlSpot(7.5, 4),
+            FlSpot(9, 1),
+            FlSpot(10.5, 7),
+            FlSpot(11, 5),
+          ];
+        }
+
+      case 4:
+        {
+          return const [
+            FlSpot(0, 1),
+            FlSpot(0.5, 8),
+            FlSpot(1.5, 1),
+            FlSpot(2.5, 4),
+            FlSpot(4, 1),
+            FlSpot(6.5, 10.5),
+            FlSpot(9, 1),
+            FlSpot(10.5, 7),
+            FlSpot(11, 5),
+          ];
+        }
+
+      case 5:
+        {
+          return const [
+            FlSpot(0, 1),
+            FlSpot(1.5, 10),
+            FlSpot(2.5, 6),
+            FlSpot(3.5, 8),
+            FlSpot(4.5, 6),
+            FlSpot(5.5, 9),
+            FlSpot(6, 4),
+            FlSpot(7, 8),
+            FlSpot(8, 5),
+            FlSpot(9.5, 7.5),
+            FlSpot(11, 5)
+          ];
+        }
+
+      case 6:
+        {
+          return const [
+            FlSpot(0, 0),
+            FlSpot(1, 5),
+            FlSpot(2, 0),
+            FlSpot(4, 8.5),
+            FlSpot(6, 1),
+            FlSpot(7.5, 10),
+            FlSpot(9, 1),
+            FlSpot(10.5, 7),
+            FlSpot(11, 5),
+          ];
+        }
+
+      case 7:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 3),
+            FlSpot(3, 5),
+            FlSpot(5, 7),
+            FlSpot(7, 2),
+            FlSpot(9, 5),
+            FlSpot(11, 10),
+          ];
+        }
+
+      case 8:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 3),
+            FlSpot(3, 5),
+            FlSpot(5, 7),
+            FlSpot(7, 2),
+            FlSpot(9, 5),
+            FlSpot(11, 10),
+          ];
+        }
+
+      case 9:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 3),
+            FlSpot(3, 5),
+            FlSpot(5, 7),
+            FlSpot(7, 2),
+            FlSpot(9, 5),
+            FlSpot(11, 10),
+          ];
+        }
+
+      case 10:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 3),
+            FlSpot(3, 5),
+            FlSpot(5, 7),
+            FlSpot(7, 2),
+            FlSpot(9, 5),
+            FlSpot(11, 10),
+          ];
+        }
+
+      case 11:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 3),
+            FlSpot(3, 5),
+            FlSpot(5, 7),
+            FlSpot(7, 2),
+            FlSpot(9, 5),
+            FlSpot(11, 10),
+          ];
+        }
+
+      case 12:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 3),
+            FlSpot(3, 5),
+            FlSpot(5, 7),
+            FlSpot(7, 2),
+            FlSpot(9, 5),
+            FlSpot(11, 10),
+          ];
+        }
+
+      case 13:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 3),
+            FlSpot(3, 5),
+            FlSpot(5, 7),
+            FlSpot(7, 2),
+            FlSpot(9, 5),
+            FlSpot(11, 10),
+          ];
+        }
+
+      default:
+        {
+          return const [
+            FlSpot(0, 6),
+            FlSpot(1, 3),
+            FlSpot(3, 5),
+            FlSpot(5, 7),
+            FlSpot(7, 2),
+            FlSpot(9, 5),
+            FlSpot(11, 10),
+          ];
+        }
+    }
   }
 }
 

@@ -9,7 +9,7 @@ import 'package:plaything/pages/mode_longdistance.dart';
 import 'package:plaything/pages/mode_music/mode_music.dart';
 import 'package:plaything/pages/mode_page.dart';
 import 'package:plaything/pages/mode_pattern.dart';
-import 'package:plaything/pages/mode_voice_control.dart';
+import 'package:plaything/pages/mode_voice.dart';
 import 'package:plaything/pages/privacy_policy.dart';
 import 'package:plaything/pages/privacy_policy_initial.dart';
 import 'package:plaything/pages/settings.dart';
@@ -75,7 +75,7 @@ class AppRoute {
     ),
     GetPage(
       name: voiceControlMode,
-      page: () => const VoiceControlPage(),
+      page: () => const VoiceControlModePage(),
     ),
     GetPage(
       name: chatMode,

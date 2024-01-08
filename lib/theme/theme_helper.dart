@@ -128,7 +128,7 @@ class ThemeHelper {
         ),
       ),
       sliderTheme: SliderThemeData(
-        trackHeight: 10.0.customHeight,
+        trackHeight: 8.0.customHeight,
         overlayShape: SliderComponentShape.noThumb,
         tickMarkShape: SliderTickMarkShape.noTickMark,
         activeTrackColor: appTheme.gray700,

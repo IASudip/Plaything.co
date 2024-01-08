@@ -12,8 +12,8 @@ class TermsandConditionPage extends StatelessWidget {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: TitleAppBar(
-        title: const Text('Terms & Condition'),
+      appBar: const TitleAppBar(
+        title: Text('Terms & Condition'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const Text('Plaything.co'),

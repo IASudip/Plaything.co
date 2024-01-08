@@ -17,8 +17,8 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: TitleAppBar(
-        title: const Text('Privacy Policy'),
+      appBar: const TitleAppBar(
+        title: Text('Privacy Policy'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const Text('Plaything.co'),

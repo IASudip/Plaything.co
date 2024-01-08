@@ -52,16 +52,17 @@ class FreeModePage extends StatelessWidget {
               Positioned(
                 top: 30.customHeight,
                 child: SizedBox(
-                  height: 209.customHeight,
+                  height: 249.customHeight,
                   width: width,
+                  // color: appTheme.deepOrange20001,
                   child: LineChart(
                     duration: const Duration(seconds: 60),
                     curve: Curves.easeIn,
                     LineChartData(
-                      minX: 70.0,
-                      maxX: 200,
-                      minY: 0.0,
-                      maxY: 100.0,
+                      minX: 3.0,
+                      maxX: 21.9,
+                      minY: 20.9,
+                      maxY: 21.9,
                       borderData: FlBorderData(show: false),
                       lineTouchData: const LineTouchData(enabled: false),
                       titlesData: const FlTitlesData(show: false),
@@ -69,6 +70,7 @@ class FreeModePage extends StatelessWidget {
                       lineBarsData: [
                         LineChartBarData(
                           isCurved: true,
+                          curveSmoothness: 0.5,
                           dotData: const FlDotData(show: false),
                           isStrokeCapRound: true,
                           gradient: LinearGradient(
@@ -82,15 +84,13 @@ class FreeModePage extends StatelessWidget {
                             (index) {
                               List<int> graphData =
                                   modeFreeController.freeModeRoute[index];
-                              debugPrint(
-                                  "Graph Data: ${modeFreeController.freeModeRoute[index]}");
                               List<int> genData =
                                   modeFreeController.generatedRoute[index];
                               debugPrint(
-                                  "Gen Data: ${modeFreeController.generatedRoute[index]}");
+                                  "FlSpot (${genData[0].toDouble()}, ${graphData[1] * 0.1})");
                               return FlSpot(
                                 genData[0].toDouble(),
-                                graphData[1].toDouble(),
+                                (graphData[1] / 10),
                               );
                             },
                           ),
@@ -112,8 +112,9 @@ class FreeModePage extends StatelessWidget {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 10.0.customHeight,
-                            horizontal: 10.0.customWidth),
+                          vertical: 10.0.customHeight,
+                          horizontal: 10.0.customWidth,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

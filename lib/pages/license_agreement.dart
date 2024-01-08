@@ -11,8 +11,8 @@ class LicenseAgreementPage extends StatelessWidget {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
-      appBar: TitleAppBar(
-        title: const Text('License Agreement'),
+      appBar: const TitleAppBar(
+        title: Text('License Agreement'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: const Text('Plaything.co'),

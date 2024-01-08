@@ -99,8 +99,10 @@ class ConnectingDeviceController extends GetxController {
     bool locStatus = await Permission.location.request().isGranted;
     debugPrint("----->>>>>Location Scan Permissions: $locStatus<<<<<-------");
 
-    Map<Permission, PermissionStatus> fileManagerStatus =
-        await [Permission.storage].request();
+    Map<Permission, PermissionStatus> fileManagerStatus = await [
+      Permission.storage,
+      Permission.microphone,
+    ].request();
     debugPrint(
         "----->>>>>File Manager Permissions: $fileManagerStatus<<<<<-------");
 

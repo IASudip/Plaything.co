@@ -33,4 +33,6 @@ class ImagePath {
   static String gravityMode = 'assets/images/mode_gravity.svg';
   static String chatMode = 'assets/images/mode_chat.svg';
   static String mic = 'assets/images/mic.svg';
+  static String finalMicAnimation = 'assets/images/smallMicAnimation.svg';
+  static String smallMicAnimation = 'assets/images/finalMicAnimation.svg';
 }
