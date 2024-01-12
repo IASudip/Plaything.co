@@ -141,7 +141,7 @@ class _GravityModePageState extends State<GravityModePage>
               child: Opacity(
                 opacity: 0.20,
                 child: CircleAvatar(
-                  radius: 185.customHeight,
+                  radius: 195.customHeight,
                   backgroundColor: appTheme.gray80001,
                 ),
               ),

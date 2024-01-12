@@ -4,15 +4,33 @@ import 'package:plaything/widgets/appbar/mode_appbar.dart';
 import 'package:plaything/widgets/neumorph_button.dart';
 
 class ModePage extends StatefulWidget {
-  const ModePage({
-    super.key,
-  });
+  const ModePage({super.key});
 
   @override
   State<ModePage> createState() => _ModePageState();
 }
 
-class _ModePageState extends State<ModePage> {
+class _ModePageState extends State<ModePage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animController;
+  late Animation<double> scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        seconds: 1,
+      ),
+    );
+
+    scale = Tween<double>(
+      begin: 0.0,
+      end: 0.8,
+    ).animate(_animController);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<ModeType> modes = [
@@ -39,7 +57,7 @@ class _ModePageState extends State<ModePage> {
       ModeType(
         mode: 'Long Distance',
         icon: ImagePath.gravityMode,
-        onTap: () => Get.toNamed(AppRoute.longDistanceMode),
+        onTap: () => Get.toNamed(AppRoute.access),
       ),
       ModeType(
         mode: 'Voice Control',
@@ -89,15 +107,24 @@ class _ModePageState extends State<ModePage> {
             ),
             Column(
               children: [
-                // TO DO update image from .png to .svg
                 Expanded(
                   flex: 3,
-                  child: Container(
-                    width: width,
-                    alignment: const Alignment(-0.7, -0.8),
-                    child: Image.asset(
-                      ImagePath.femaleToy,
-                      scale: 3,
+                  child: Center(
+                    child: AnimatedBuilder(
+                      animation: _animController,
+                      builder: (context, child) {
+                        return Builder(builder: (context) {
+                          return Transform.translate(
+                            offset: const Offset(0, 0),
+                            child: Transform.scale(
+                              scale: 0.75,
+                              child: Image.asset(
+                                ImagePath.femaleToy,
+                              ),
+                            ),
+                          );
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -148,6 +175,12 @@ class _ModePageState extends State<ModePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
   }
 }
 

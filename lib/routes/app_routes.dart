@@ -1,12 +1,13 @@
 import 'package:plaything/core/app_export.dart';
-import 'package:plaything/pages/chat_room.dart';
+import 'package:plaything/pages/access_page.dart';
+import 'package:plaything/pages/chat_room_page.dart';
 import 'package:plaything/pages/connecting_device.dart';
 import 'package:plaything/pages/license_agreement.dart';
 import 'package:plaything/pages/mode_chat.dart';
 import 'package:plaything/pages/mode_free.dart';
 import 'package:plaything/pages/mode_gravity.dart';
 import 'package:plaything/pages/mode_longdistance.dart';
-import 'package:plaything/pages/mode_music/mode_music.dart';
+import 'package:plaything/pages/mode_music/mode_music_page.dart';
 import 'package:plaything/pages/mode_page.dart';
 import 'package:plaything/pages/mode_pattern.dart';
 import 'package:plaything/pages/mode_voice.dart';
@@ -30,6 +31,8 @@ class AppRoute {
   static const String voiceControlMode = '/voiceControl_mode';
   static const String chatMode = '/chat_mode';
   static const String chatRoom = '/chat_room';
+
+  static const String access = '/access';
 
   static const String setting = '/setting';
   static const String privacyPolicy = '/privacy_policy';
@@ -84,6 +87,10 @@ class AppRoute {
     GetPage(
       name: chatRoom,
       page: () => const ChatRoomPage(),
+    ),
+    GetPage(
+      name: access,
+      page: () => const AccessPage(),
     ),
     GetPage(
       name: setting,

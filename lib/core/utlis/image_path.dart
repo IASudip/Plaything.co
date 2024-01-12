@@ -9,7 +9,7 @@ class ImagePath {
   static String bluetooth = 'assets/images/bluetooth_icon.svg';
   static String phoneVibration = 'assets/images/phone_vibration.svg';
   static String femaleToy = "assets/images/female_toy.png";
-  static String maleToy = "assets/images/male_toy.png";
+  static String maleToy = "assets/images/male_toy.svg";
 
   static String patternMode = 'assets/images/mode_wave.svg';
   static String bungyWave = 'assets/images/bungy_wave.svg';

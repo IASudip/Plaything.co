@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:plaything/controller/connecting_device_controller.dart';
+import 'package:plaything/controller/mode_pattern_controller.dart';
 import 'package:plaything/core/app_export.dart';
 import 'package:plaything/widgets/appbar/pattern_appbar.dart';
 
@@ -15,12 +16,16 @@ class PatternModePage extends StatefulWidget {
 class _PatternModePageState extends State<PatternModePage> {
   final ConnectingDeviceController _connectingDeviceController =
       Get.put(ConnectingDeviceController());
+  final PatternModeController _patternModeController =
+      Get.put(PatternModeController());
 
   double _strength = 110.0;
+  int modeIndex = 1;
 
   @override
   void initState() {
     super.initState();
+
     _connectingDeviceController.onCharacteristicRead();
   }
 
@@ -33,8 +38,9 @@ class _PatternModePageState extends State<PatternModePage> {
       PatternDetails(
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x0, 4]);
-
           _connectingDeviceController.sendData(byteData);
+          modeIndex = 1;
+          setState(() {});
         },
         image: ImagePath.shockWave,
         name: "Shock Wave",
@@ -42,8 +48,9 @@ class _PatternModePageState extends State<PatternModePage> {
       PatternDetails(
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x0, 3]);
-
           _connectingDeviceController.sendData(byteData);
+          modeIndex = 2;
+          setState(() {});
         },
         image: ImagePath.lightningWave,
         name: "Lightning",
@@ -51,8 +58,9 @@ class _PatternModePageState extends State<PatternModePage> {
       PatternDetails(
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x0, 5]);
-
           _connectingDeviceController.sendData(byteData);
+          modeIndex = 3;
+          setState(() {});
         },
         image: ImagePath.parkorWave,
         name: "Parkor",
@@ -60,8 +68,9 @@ class _PatternModePageState extends State<PatternModePage> {
       PatternDetails(
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x0, 7]);
-
           _connectingDeviceController.sendData(byteData);
+          modeIndex = 4;
+          setState(() {});
         },
         image: ImagePath.bangBangWave,
         name: "Bang-Bang",
@@ -70,6 +79,8 @@ class _PatternModePageState extends State<PatternModePage> {
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x0, 6]);
           _connectingDeviceController.sendData(byteData);
+          modeIndex = 5;
+          setState(() {});
         },
         image: ImagePath.swingWave,
         name: "Swing",
@@ -78,6 +89,8 @@ class _PatternModePageState extends State<PatternModePage> {
         onTap: () {
           Uint8List byteData = Uint8List.fromList([0x00, 9]);
           _connectingDeviceController.sendData(byteData);
+          modeIndex = 6;
+          setState(() {});
         },
         image: ImagePath.bungyWave,
         name: "Bungy",
@@ -154,7 +167,16 @@ class _PatternModePageState extends State<PatternModePage> {
                                 appTheme.gray600,
                               ],
                             ),
-                            spots: patternDesign(6),
+                            spots: List.generate(
+                              _patternModeController
+                                  .patternDesgn(modeIndex)
+                                  .length,
+                              (index) {
+                                List<double> flspot = _patternModeController
+                                    .patternDesgn(modeIndex)[index];
+                                return FlSpot(flspot[0], flspot[1]);
+                              },
+                            ),
                           )
                         ]),
                   ),
@@ -193,7 +215,6 @@ class _PatternModePageState extends State<PatternModePage> {
                         value: _strength,
                         onChanged: (value) {
                           _strength = value;
-                          debugPrint(_strength.toString());
                           final Uint8List bytes =
                               Uint8List.fromList([0x0, _strength.toInt()]);
                           _connectingDeviceController.sendData(bytes);
@@ -203,48 +224,10 @@ class _PatternModePageState extends State<PatternModePage> {
                     ],
                   ),
                 ),
-                /* Container(
-                  height: 80.customHeight,
-                  width: width,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 10.0.customWidth,
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Speed',
-                        style: theme.textTheme.titleSmall,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(
-                            5,
-                            (index) => Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10.0.customWidth,
-                                      vertical: 7.0.customHeight),
-                                  child: Text("${index + 1}"),
-                                )),
-                      ),
-                      Slider(
-                        min: 195.0,
-                        max: 200.0,
-                        divisions: 4,
-                        value: _speed,
-                        onChanged: (value) {
-                          _speed = value.roundToDouble();
-                          debugPrint(_speed.toString());
-                          setState(() {});
-                        },
-                      ),
-                    ],
-                  ),
-                ),*/
                 SizedBox(
                   height: 250.customHeight,
                   width: width,
                   child: GridView.builder(
-                    // physics: const NeverScrollableScrollPhysics(),
                     itemCount: patternDetail.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -315,208 +298,4 @@ class _PatternModePageState extends State<PatternModePage> {
     );
     super.dispose();
   }
-
-  List<FlSpot> patternDesign(int mode) {
-    switch (mode) {
-      case 1:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 10),
-            FlSpot(3, 1),
-            FlSpot(5, 10),
-            FlSpot(7, 1),
-            FlSpot(9, 10),
-            FlSpot(11, 1),
-          ];
-        }
-
-      case 2:
-        {
-          return const [
-            FlSpot(0, 3),
-            FlSpot(5.5, 9.5),
-            FlSpot(11, 3),
-          ];
-        }
-
-      case 3:
-        {
-          return const [
-            FlSpot(0, 0),
-            FlSpot(1, 2),
-            FlSpot(2, 0),
-            FlSpot(4, 9),
-            FlSpot(6, 1),
-            FlSpot(7.5, 4),
-            FlSpot(9, 1),
-            FlSpot(10.5, 7),
-            FlSpot(11, 5),
-          ];
-        }
-
-      case 4:
-        {
-          return const [
-            FlSpot(0, 1),
-            FlSpot(0.5, 8),
-            FlSpot(1.5, 1),
-            FlSpot(2.5, 4),
-            FlSpot(4, 1),
-            FlSpot(6.5, 10.5),
-            FlSpot(9, 1),
-            FlSpot(10.5, 7),
-            FlSpot(11, 5),
-          ];
-        }
-
-      case 5:
-        {
-          return const [
-            FlSpot(0, 1),
-            FlSpot(1.5, 10),
-            FlSpot(2.5, 6),
-            FlSpot(3.5, 8),
-            FlSpot(4.5, 6),
-            FlSpot(5.5, 9),
-            FlSpot(6, 4),
-            FlSpot(7, 8),
-            FlSpot(8, 5),
-            FlSpot(9.5, 7.5),
-            FlSpot(11, 5)
-          ];
-        }
-
-      case 6:
-        {
-          return const [
-            FlSpot(0, 0),
-            FlSpot(1, 5),
-            FlSpot(2, 0),
-            FlSpot(4, 8.5),
-            FlSpot(6, 1),
-            FlSpot(7.5, 10),
-            FlSpot(9, 1),
-            FlSpot(10.5, 7),
-            FlSpot(11, 5),
-          ];
-        }
-
-      case 7:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 3),
-            FlSpot(3, 5),
-            FlSpot(5, 7),
-            FlSpot(7, 2),
-            FlSpot(9, 5),
-            FlSpot(11, 10),
-          ];
-        }
-
-      case 8:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 3),
-            FlSpot(3, 5),
-            FlSpot(5, 7),
-            FlSpot(7, 2),
-            FlSpot(9, 5),
-            FlSpot(11, 10),
-          ];
-        }
-
-      case 9:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 3),
-            FlSpot(3, 5),
-            FlSpot(5, 7),
-            FlSpot(7, 2),
-            FlSpot(9, 5),
-            FlSpot(11, 10),
-          ];
-        }
-
-      case 10:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 3),
-            FlSpot(3, 5),
-            FlSpot(5, 7),
-            FlSpot(7, 2),
-            FlSpot(9, 5),
-            FlSpot(11, 10),
-          ];
-        }
-
-      case 11:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 3),
-            FlSpot(3, 5),
-            FlSpot(5, 7),
-            FlSpot(7, 2),
-            FlSpot(9, 5),
-            FlSpot(11, 10),
-          ];
-        }
-
-      case 12:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 3),
-            FlSpot(3, 5),
-            FlSpot(5, 7),
-            FlSpot(7, 2),
-            FlSpot(9, 5),
-            FlSpot(11, 10),
-          ];
-        }
-
-      case 13:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 3),
-            FlSpot(3, 5),
-            FlSpot(5, 7),
-            FlSpot(7, 2),
-            FlSpot(9, 5),
-            FlSpot(11, 10),
-          ];
-        }
-
-      default:
-        {
-          return const [
-            FlSpot(0, 6),
-            FlSpot(1, 3),
-            FlSpot(3, 5),
-            FlSpot(5, 7),
-            FlSpot(7, 2),
-            FlSpot(9, 5),
-            FlSpot(11, 10),
-          ];
-        }
-    }
-  }
-}
-
-class PatternDetails {
-  final VoidCallback onTap;
-  final String image;
-  final String name;
-
-  PatternDetails({
-    required this.onTap,
-    required this.image,
-    required this.name,
-  });
 }

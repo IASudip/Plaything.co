@@ -128,8 +128,8 @@ class _ConnectingDevicePageState extends State<ConnectingDevicePage>
                     },
                     child: Image.asset(
                       ImagePath.femaleToy,
-                      height: 112.customHeight,
-                      width: 43.customWidth,
+                      height: 45.customHeight,
+                      width: 33.customWidth,
                     ),
                   ),
                 ),

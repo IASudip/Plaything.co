@@ -211,6 +211,7 @@ class ConnectingDeviceController extends GetxController {
             if (state == BluetoothDeviceState.connecting) {
               globals.deviceState = "Connecting";
               debugPrint("---->>>Device is ${state.name}<<<<----");
+
               Get.defaultDialog(
                 content: const Center(
                   child: CircularProgressIndicator(
@@ -246,6 +247,8 @@ class ConnectingDeviceController extends GetxController {
                 ),
               );
               return;
+            } else {
+              debugPrint('Disconnecting..');
             }
           },
         );

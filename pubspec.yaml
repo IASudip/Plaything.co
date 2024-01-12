@@ -49,10 +49,11 @@ dependencies:
   fl_chart: ^0.63.0
   flutter_screenutil: ^5.9.0
   on_audio_query: ^2.9.0
-  sound_stream: ^0.2.0
   audio_waveforms: ^1.0.4
+  noise_meter: ^5.0.2
   sleek_circular_slider: ^2.0.1
   sensors_plus: ^4.0.2
+  pin_code_fields: ^8.0.1
 
 dev_dependencies:
   flutter_test:

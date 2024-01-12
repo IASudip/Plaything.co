@@ -1,11 +1,7 @@
-import 'dart:async';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:plaything/controller/connecting_device_controller.dart';
+import 'package:plaything/controller/mode_voice_controller.dart';
 import 'package:plaything/core/app_export.dart';
 import 'package:plaything/widgets/appbar/title_appbar.dart';
-import 'package:sound_stream/sound_stream.dart';
 
 class VoiceControlModePage extends StatefulWidget {
   const VoiceControlModePage({super.key});
@@ -16,26 +12,15 @@ class VoiceControlModePage extends StatefulWidget {
 
 class _VoiceControlModePageState extends State<VoiceControlModePage>
     with SingleTickerProviderStateMixin {
-  final ConnectingDeviceController _connectingDeviceController =
-      ConnectingDeviceController();
+  final VoiceModeController voiceModeController =
+      Get.put(VoiceModeController());
+
   late AnimationController _animationController;
   late Animation<double> scale;
-
-  final RecorderStream recorder = RecorderStream();
-  final PlayerStream player = PlayerStream();
-
-  final List<Uint8List> micChunks = [];
-  bool isRecording = false;
-  bool isPlaying = false;
-
-  StreamSubscription? recorderStatus;
-  StreamSubscription? playerStatus;
-  StreamSubscription? audioStream;
 
   @override
   void initState() {
     super.initState();
-    initPlugin();
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(
@@ -52,50 +37,6 @@ class _VoiceControlModePageState extends State<VoiceControlModePage>
         curve: Curves.ease,
       ),
     );
-  }
-
-  Future<void> initPlugin() async {
-    recorderStatus = recorder.status.listen((status) {
-      if (mounted) {
-        setState(() {
-          isRecording = status == SoundStreamStatus.Playing;
-        });
-      }
-    });
-
-    audioStream = recorder.audioStream.listen((data) {
-      if (isPlaying) {
-        player.writeChunk(data);
-        _connectingDeviceController.sendData(data);
-      } else {
-        micChunks.add(data);
-        _connectingDeviceController.sendData(data);
-      }
-    });
-
-    playerStatus = player.status.listen((status) {
-      if (mounted) {
-        setState(() {
-          isPlaying = status == SoundStreamStatus.Playing;
-        });
-      }
-    });
-
-    await Future.wait([
-      recorder.initialize(),
-      player.initialize(),
-    ]);
-  }
-
-  void play() async {
-    await player.start();
-
-    if (micChunks.isNotEmpty) {
-      for (var chunk in micChunks) {
-        await player.writeChunk(chunk);
-      }
-      micChunks.clear();
-    }
   }
 
   @override
@@ -139,11 +80,15 @@ class _VoiceControlModePageState extends State<VoiceControlModePage>
                   _animationController.forward();
                 }
 
-                if (scale.value == 1.0) {}
+                if (voiceModeController.isRecording.value) {
+                  voiceModeController.stop();
+                } else {
+                  voiceModeController.start();
+                }
               },
               child: Center(
                 child: AnimatedBuilder(
-                  animation: scale,
+                  animation: _animationController,
                   builder: (context, child) {
                     return Transform.translate(
                       offset: Offset(
@@ -197,9 +142,7 @@ class _VoiceControlModePageState extends State<VoiceControlModePage>
 
   @override
   void dispose() {
-    recorderStatus?.cancel();
-    playerStatus?.cancel();
-    audioStream?.cancel();
+    voiceModeController.stop();
     _animationController.dispose();
     super.dispose();
   }
