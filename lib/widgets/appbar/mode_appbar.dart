@@ -24,18 +24,16 @@ class ModeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(
-                top: 20.0.customHeight, right: 20.0.customWidth),
+            padding: const EdgeInsets.all(8.0),
             child: NeumorphismButton(
               onTap: () => Get.toNamed(AppRoute.connectDevice),
-              height: 40.customHeight,
-              width: 40.customWidth,
+              height: 45.customHeight,
+              width: 45.customWidth,
               elevation: 0,
-              child: Padding(
-                padding: EdgeInsets.all(8.0.adaptSize),
-                child: SvgPicture.asset(
-                  ImagePath.bluetooth,
-                ),
+              child: SvgPicture.asset(
+                ImagePath.bluetooth,
+                height: 15.customHeight,
+                width: 15.customWidth,
               ),
             ),
           ),

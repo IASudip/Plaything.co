@@ -60,16 +60,15 @@ class _PrivacyPolicyInitialPageState extends State<PrivacyPolicyInitialPage>
                       height: 786.customHeight,
                       width: 348.customWidth,
                       ImagePath.privacyCard,
-                      // fit: Box,
                     ),
                   ),
                   Positioned(
-                    top: 172.0.customHeight,
-                    bottom: 180.customHeight,
-                    left: 71.customWidth,
-                    right: 29.0.customWidth,
+                    top: height * 0.15.customHeight,
+                    bottom: height * 0.22.customHeight,
+                    left: width * 0.23.customWidth,
+                    right: width * 0.035.customWidth,
                     child: SizedBox(
-                      width: 290.customWidth,
+                      width: 294.customWidth,
                       height: 447.customHeight,
                       child: Column(
                         children: [
@@ -85,30 +84,34 @@ class _PrivacyPolicyInitialPageState extends State<PrivacyPolicyInitialPage>
                           Text(
                             lorem(
                               paragraphs: 4,
-                              words: 220,
+                              words: 180,
                             ),
+                            textAlign: TextAlign.justify,
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 22,
+                            maxLines: 20,
                             style: theme.textTheme.bodyMedium,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Checkbox.adaptive(
-                                activeColor: appTheme.orange50,
-                                checkColor: appTheme.gray80001,
-                                value: _agreed,
-                                onChanged: (v) {
-                                  setState(() {
-                                    _agreed = v!;
-                                  });
-                                },
-                              ),
-                              Text(
-                                'I agreed to all Privacy Policy',
-                                style: theme.textTheme.bodyMedium,
-                              ),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox.adaptive(
+                                  activeColor: appTheme.orange50,
+                                  checkColor: appTheme.gray80001,
+                                  value: _agreed,
+                                  onChanged: (v) {
+                                    setState(() {
+                                      _agreed = v!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'I agreed to all Privacy Policy',
+                                  style: theme.textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

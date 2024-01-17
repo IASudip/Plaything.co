@@ -33,6 +33,17 @@ class ConnectingDeviceController extends GetxController {
     }
   }
 
+  Future<bool> isLocationEnable() async {
+    bool gps = await Permission.location.serviceStatus.isEnabled;
+    if (gps) {
+      debugPrint("----->>>>Location Enable: $gps<<<<------");
+      return true;
+    } else {
+      debugPrint("----->>>>Location Enable: $gps<<<<------");
+      return false;
+    }
+  }
+
   Future<void> getPermission() async {
     bool bleScan = await Permission.bluetoothScan.isGranted;
     bool locStatus = await Permission.location.isGranted;
@@ -82,24 +93,14 @@ class ConnectingDeviceController extends GetxController {
     }
   }
 
-  Future<bool> isLocationEnable() async {
-    bool gps = await Permission.location.serviceStatus.isEnabled;
-    if (gps) {
-      debugPrint("----->>>>Location Enable: $gps<<<<------");
-      return true;
-    } else {
-      debugPrint("----->>>>Location Enable: $gps<<<<------");
-      return false;
-    }
-  }
-
   Future<void> isReqdPermissionGranted() async {
     debugPrint("----->>>>>Initial Permissions Started<<<<<-------");
 
-    bool locStatus = await Permission.location.request().isGranted;
-    debugPrint("----->>>>>Location Scan Permissions: $locStatus<<<<<-------");
+    // bool locStatus = await Permission.location.request().isGranted;
+    // debugPrint("----->>>>>Location Scan Permissions: $locStatus<<<<<-------");
 
     Map<Permission, PermissionStatus> fileManagerStatus = await [
+      Permission.location,
       Permission.storage,
       Permission.microphone,
     ].request();
@@ -122,9 +123,17 @@ class ConnectingDeviceController extends GetxController {
         await Permission.bluetoothConnect.request().isGranted;
     debugPrint("----->>>>>Bluetooth Status: $blueConnectStatus<<<<<-------");
 
-    await showBluetoohDialog();
+    if (await isBluetoothOn() == false) {
+      await showBluetoohDialog();
+      return;
+    }
 
-    await showGPSDialog();
+    if (await isLocationEnable() == false) {
+      showGPSDialog();
+      return;
+    }
+
+    // await showGPSDialog();
   }
 
   Future<void> startBleDeviceScan() async {
@@ -276,8 +285,10 @@ class ConnectingDeviceController extends GetxController {
           } else if (characteristic.uuid.toString() ==
               Guid(_uuidRead).toString()) {
             globals.readCharacteristic = characteristic;
-            await globals.readCharacteristic!.read();
-            onCharacteristicRead();
+            if (globals.readCharacteristic != null) {
+              await globals.readCharacteristic!.read();
+              onCharacteristicRead();
+            }
           } else if (characteristic.uuid.toString() ==
               Guid(_uuidYaliBNotify).toString()) {
             globals.yaliCharacteristic = characteristic;

@@ -90,7 +90,7 @@ class AppRoute {
     ),
     GetPage(
       name: access,
-      page: () => const AccessPage(),
+      page: () => AccessPage(),
     ),
     GetPage(
       name: setting,

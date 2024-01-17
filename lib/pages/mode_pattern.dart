@@ -228,12 +228,12 @@ class _PatternModePageState extends State<PatternModePage> {
                   height: 250.customHeight,
                   width: width,
                   child: GridView.builder(
+                    // physics: NeverScrollableScrollPhysics(),
                     itemCount: patternDetail.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      childAspectRatio: 1.0,
-                      mainAxisExtent: 120,
-                      maxCrossAxisExtent: 120,
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      childAspectRatio: 16 / 9,
+                      mainAxisExtent: height * 0.15.customHeight,
+                      maxCrossAxisExtent: width * 0.4.customWidth,
                     ),
                     itemBuilder: (context, index) {
                       return InkWell(

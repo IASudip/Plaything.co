@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "882915756141",
+    "project_id": "plaything-81544",
+    "storage_bucket": "plaything-81544.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882915756141:android:e4252cc81c0a09b2511764",
+        "android_client_info": {
+          "package_name": "com.example.plaything"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUIhZYE5s_ilEvQvvXw9ow7wJKsIAvyI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

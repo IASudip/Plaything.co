@@ -68,10 +68,9 @@ class _MusicModeAppBarState extends State<MusicModeAppBar> {
         bottom: TabBar(
           isScrollable: true,
           controller: widget.controller,
-          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorSize: TabBarIndicatorSize.label,
           indicatorPadding: EdgeInsets.symmetric(
-            horizontal: 16.customWidth,
-            vertical: 10.customHeight,
+            vertical: 8.adaptSize,
           ),
           indicator: BoxDecoration(
             color: appTheme.orange50,
@@ -104,7 +103,7 @@ class _MusicModeAppBarState extends State<MusicModeAppBar> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
-                    100.0.customWidth,
+                    30.0.customWidth,
                   ),
                   border: Border.all(
                     width: 1.0,

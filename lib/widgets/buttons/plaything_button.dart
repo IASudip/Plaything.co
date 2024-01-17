@@ -4,10 +4,12 @@ import 'package:plaything/core/app_export.dart';
 class PlaythingButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
+  final Widget child;
   const PlaythingButton({
     super.key,
     this.label = 'Plaything.co',
     required this.onPressed,
+    required this.child,
   });
 
   @override
@@ -28,13 +30,7 @@ class PlaythingButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: theme.textTheme.headlineLarge!.color,
-          fontWeight: theme.textTheme.titleMedium!.fontWeight,
-        ),
-      ),
+      child: child,
     );
   }
 }

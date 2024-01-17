@@ -40,19 +40,21 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           height: double.maxFinite,
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 35.customWidth),
+          color: appTheme.deepOrange200,
           child: Stack(
             children: [
               Center(
-                  child: Opacity(
-                opacity: 0.05,
-                child: SvgPicture.asset(
-                  ImagePath.splashScreenLogo,
+                child: Opacity(
+                  opacity: 0.05,
+                  child: SvgPicture.asset(
+                    ImagePath.splashScreenLogo,
+                  ),
                 ),
-              )),
+              ),
               Text(
                 lorem(
                   paragraphs: 6,
-                  words: 200,
+                  words: 150,
                 ),
                 style: theme.textTheme.bodyMedium,
               ),

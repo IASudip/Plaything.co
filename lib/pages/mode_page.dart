@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plaything/controller/mode_page_controller.dart';
 import 'package:plaything/core/app_export.dart';
 import 'package:plaything/widgets/appbar/mode_appbar.dart';
 import 'package:plaything/widgets/neumorph_button.dart';
@@ -12,6 +13,7 @@ class ModePage extends StatefulWidget {
 
 class _ModePageState extends State<ModePage>
     with SingleTickerProviderStateMixin {
+  final ModePageController _modePageController = Get.put(ModePageController());
   late AnimationController _animController;
   late Animation<double> scale;
 
@@ -33,44 +35,6 @@ class _ModePageState extends State<ModePage>
 
   @override
   Widget build(BuildContext context) {
-    List<ModeType> modes = [
-      ModeType(
-        mode: 'Pattern',
-        icon: ImagePath.patternMode,
-        onTap: () => Get.toNamed(AppRoute.patternMode),
-      ),
-      ModeType(
-        mode: 'Music',
-        icon: ImagePath.musicMode,
-        onTap: () => Get.toNamed(AppRoute.musicMode),
-      ),
-      ModeType(
-        mode: 'Free Mode',
-        icon: ImagePath.freeMode,
-        onTap: () => Get.toNamed(AppRoute.freeMode),
-      ),
-      ModeType(
-        mode: 'Gravity',
-        icon: ImagePath.gravityMode,
-        onTap: () => Get.toNamed(AppRoute.gravityMode),
-      ),
-      ModeType(
-        mode: 'Long Distance',
-        icon: ImagePath.gravityMode,
-        onTap: () => Get.toNamed(AppRoute.access),
-      ),
-      ModeType(
-        mode: 'Voice Control',
-        icon: ImagePath.gravityMode,
-        onTap: () => Get.toNamed(AppRoute.voiceControlMode),
-      ),
-      ModeType(
-        mode: 'Chat',
-        icon: ImagePath.chatMode,
-        onTap: () => Get.toNamed(AppRoute.chatMode),
-      ),
-    ];
-
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
 
@@ -97,7 +61,7 @@ class _ModePageState extends State<ModePage>
         child: Stack(
           children: [
             Align(
-              alignment: const Alignment(0, -1.25),
+              alignment: Alignment(0, -1.0.customHeight),
               child: Opacity(
                 opacity: 0.05,
                 child: SvgPicture.asset(
@@ -134,9 +98,9 @@ class _ModePageState extends State<ModePage>
                     runSpacing: 5.0.customWidth,
                     alignment: WrapAlignment.center,
                     children: List.generate(
-                      modes.length,
+                      _modePageController.modes.length,
                       (index) => InkWell(
-                        onTap: modes[index].onTap,
+                        onTap: _modePageController.modes[index].onTap,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                             vertical: 15.customHeight,
@@ -149,17 +113,18 @@ class _ModePageState extends State<ModePage>
                                   bottom: 15.0.customHeight,
                                 ),
                                 child: Text(
-                                  modes[index].mode,
+                                  _modePageController.modes[index].mode,
                                   style: theme.textTheme.labelLarge,
                                 ),
                               ),
                               NeumorphismButton(
-                                onTap: modes[index].onTap,
+                                onTap: _modePageController.modes[index].onTap,
                                 height: 65.customHeight,
                                 width: 65.customWidth,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: SvgPicture.asset(modes[index].icon),
+                                child: SvgPicture.asset(
+                                  _modePageController.modes[index].icon,
+                                  height: 25.customHeight,
+                                  width: 25.customWidth,
                                 ),
                               ),
                             ],
@@ -182,15 +147,4 @@ class _ModePageState extends State<ModePage>
     _animController.dispose();
     super.dispose();
   }
-}
-
-class ModeType {
-  final String mode;
-  final String icon;
-  final VoidCallback? onTap;
-  ModeType({
-    required this.mode,
-    required this.icon,
-    required this.onTap,
-  });
 }

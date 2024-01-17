@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:plaything/core/app_export.dart';
-import 'package:plaything/widgets/appbar/title_appbar.dart';
+import 'package:plaything/widgets/appbar/controldevice_appbar.dart';
 
-class ChatModePage extends StatefulWidget {
+class ChatModePage extends StatelessWidget {
   const ChatModePage({super.key});
 
-  @override
-  State<ChatModePage> createState() => _ChatModePageState();
-}
-
-class _ChatModePageState extends State<ChatModePage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
-      appBar: const TitleAppBar(
-        title: Text('Chat'),
-        automaticallyImplyLeading: true,
-      ),
+      // To-do Change AppBar
+      // appBar: const TitleAppBar(
+      //   title: Text('Chat'),
+      //   automaticallyImplyLeading: true,
+      // ),
+      appBar: const ConnectDeviceAppBar(title: Text('Chats')),
       bottomNavigationBar: PlayThingFooter(
         color: appTheme.red30003,
       ),

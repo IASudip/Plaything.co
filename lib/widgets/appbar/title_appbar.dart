@@ -33,7 +33,7 @@ class _TitleAppBarState extends State<TitleAppBar> {
     return PreferredSize(
       preferredSize: widget.preferredSize,
       child: AppBar(
-        automaticallyImplyLeading: widget.automaticallyImplyLeading,
+        automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () => Get.back(),
           child: Container(

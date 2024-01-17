@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:plaything/controller/connect_user_controller.dart';
 import 'package:plaything/core/app_export.dart';
 
 class ChatRoomPage extends StatefulWidget {
@@ -10,6 +11,17 @@ class ChatRoomPage extends StatefulWidget {
 }
 
 class _ChatRoomPageState extends State<ChatRoomPage> {
+  final ConnectUserController _connectUserController =
+      Get.put(ConnectUserController());
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await _connectUserController.chatList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;

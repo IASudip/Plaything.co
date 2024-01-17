@@ -24,23 +24,17 @@ class NeumorphismButton extends StatefulWidget {
 class _NeumorphismButtonState extends State<NeumorphismButton> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: widget.elevation,
-      color: appTheme.gray600,
+    return InkWell(
       borderRadius: BorderRadius.circular(
         widget.height.customHeight,
       ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(
-          widget.height.customHeight,
-        ),
-        splashColor: Colors.white,
-        onTap: widget.onTap,
-        child: Container(
-          height: widget.height.customHeight,
-          width: widget.width.customWidth,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
+      splashColor: Colors.white,
+      onTap: widget.onTap,
+      child: Container(
+        height: widget.height.customHeight,
+        width: widget.width.customWidth,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -50,23 +44,28 @@ class _NeumorphismButtonState extends State<NeumorphismButton> {
                 appTheme.gray600,
               ],
             ),
-          ),
-          child: Container(
-            height: (widget.height - 5).customHeight,
-            width: (widget.height - 5).customWidth,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  appTheme.gray600,
-                  appTheme.gray80001,
-                ],
-              ),
+            boxShadow: [
+              BoxShadow(
+                  color: appTheme.gray70001,
+                  spreadRadius: 0.1.fSize,
+                  blurRadius: 10),
+            ]),
+        child: Container(
+          height: (widget.height - 5).customHeight,
+          width: (widget.width - 5).customWidth,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                appTheme.gray600,
+                appTheme.gray80001,
+              ],
             ),
-            child: widget.child,
           ),
+          child: widget.child,
         ),
       ),
     );
