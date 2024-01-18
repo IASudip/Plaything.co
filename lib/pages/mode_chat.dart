@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:plaything/controller/connect_user_controller.dart';
 import 'package:plaything/core/app_export.dart';
+import 'package:plaything/models/user_model.dart';
 import 'package:plaything/widgets/appbar/controldevice_appbar.dart';
 
-class ChatModePage extends StatelessWidget {
+class ChatModePage extends StatefulWidget {
   const ChatModePage({super.key});
+
+  @override
+  State<ChatModePage> createState() => _ChatModePageState();
+}
+
+class _ChatModePageState extends State<ChatModePage> {
+  final ConnectUserController _connectUserController =
+      Get.put(ConnectUserController());
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      _connectUserController.fetchChatList();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +67,11 @@ class ChatModePage extends StatelessWidget {
               width: width,
               height: height,
               child: ListView.builder(
-                itemCount: 15,
+                itemCount: _connectUserController.fetchedChats.length,
                 itemBuilder: ((context, index) {
+                  Chat chatList = _connectUserController.fetchedChats[index];
+                  debugPrint(
+                      "----->>>ChatList Data ${chatList.userId}<<<-----");
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 26.0.customWidth),
                     child: ListTile(
@@ -58,7 +79,7 @@ class ChatModePage extends StatelessWidget {
                       leading: CircleAvatar(
                         backgroundColor: appTheme.gray80001,
                       ),
-                      title: const Text('User Name'),
+                      title: Text("${chatList.userId}"),
                       titleTextStyle: theme.textTheme.bodyMedium,
                     ),
                   );

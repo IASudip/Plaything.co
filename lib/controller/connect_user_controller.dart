@@ -18,6 +18,7 @@ class ConnectUserController extends GetxController {
   RxString userID = ''.obs;
   String? prefUserId = '';
   String? prefDocId = '';
+  RxList fetchedChats = [].obs;
   RxBool creatingUser = false.obs;
   RxBool authSharedCode = false.obs;
   DocumentReference? chatDocRef;
@@ -54,9 +55,12 @@ class ConnectUserController extends GetxController {
 
   Future<bool> verifyAuthencationCode() async {
     CollectionReference collectionReference = _firestore.collection("users");
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     QuerySnapshot checkCode = await collectionReference
         .where('code', isEqualTo: codeController.value.text)
         .get();
+
+    prefDocId = preferences.getString(PrefString.docID);
 
     bool isCodeExist = checkCode.docs.isNotEmpty;
     if (isCodeExist) {
@@ -66,33 +70,34 @@ class ConnectUserController extends GetxController {
       Users users = Users(
         users: UsersClass(chats: [
           Chat(
-            toUser: senderID,
+            userId: senderID,
             status: "verified",
           ),
         ]),
       );
       chatDocRef =
           await collectionReference.doc(prefDocId).collection('chat').add({
-        'toUser': users.users!.chats!.first.toUser,
+        'toUser': users.users!.chats!.first.userId,
         'status': users.users!.chats!.first.status,
       });
       await collectionReference
           .doc(prefDocId)
           .collection('chat')
           .doc(chatDocRef!.id)
-          .update({'document_id': chatDocRef!.id});
+          .update({'document_id': chatDocRef!.id}).whenComplete(
+              () => authSharedCode.value = false);
 
       Users users2 = Users(
         users: UsersClass(chats: [
           Chat(
-            fromUser: prefUserId,
+            userId: prefUserId,
             status: "verified",
           ),
         ]),
       );
       DocumentReference chatDocRef2 =
           await collectionReference.doc(documentRefID).collection('chat').add({
-        'fromUser': users2.users!.chats!.first.fromUser,
+        'fromUser': users2.users!.chats!.first.userId,
         'status': users2.users!.chats!.first.status,
       });
       await collectionReference
@@ -101,16 +106,10 @@ class ConnectUserController extends GetxController {
           .doc(chatDocRef2.id)
           .update({'document_id': chatDocRef2.id}).whenComplete(
               () => authSharedCode.value = false);
-      // var statusQuerySnapshot = collectionReference
-      //     .doc(documentRefID)
-      //     .collection('chat')
-      //     .snapshots()
-      //     .listen((event) {
-      //   status.value = event.docs.first.id;
-      // });
 
       codeController.clear();
       Get.back();
+      Get.toNamed(AppRoute.chatMode);
     } else {
       debugPrint("Code doesn't match.");
     }
@@ -235,6 +234,35 @@ class ConnectUserController extends GetxController {
       ),
     );
     return;
+  }
+
+  Future<void> fetchChatList() async {
+    try {
+      CollectionReference collectionReference = _firestore.collection('users');
+
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      prefDocId = preferences.getString(PrefString.docID);
+
+      QuerySnapshot chatSnapShot =
+          await collectionReference.doc(prefDocId).collection('chat').get();
+      if (chatSnapShot.docs.isNotEmpty) {
+        fetchedChats.assignAll(chatSnapShot.docs
+            .map((doc) => Chat.fromJson(doc.data() as Map<String, dynamic>))
+            .toList());
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> checkRoute() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    prefUserId = preferences.getString(PrefString.userID);
+    if (prefUserId != null) {
+      Get.toNamed(AppRoute.chatMode);
+    } else {
+      Get.toNamed(AppRoute.access);
+    }
   }
 
   @override
