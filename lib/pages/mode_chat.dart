@@ -79,7 +79,7 @@ class _ChatModePageState extends State<ChatModePage> {
                       leading: CircleAvatar(
                         backgroundColor: appTheme.gray80001,
                       ),
-                      title: Text("${chatList.userId}"),
+                      title: Text("${chatList.documentId}"),
                       titleTextStyle: theme.textTheme.bodyMedium,
                     ),
                   );

@@ -70,31 +70,27 @@ class UsersClass {
 class Chat {
   final String? documentId;
   final String? userId;
+  final String? userName;
   final String? status;
-  final String? toDevice;
-  final String? fromDevice;
 
   Chat({
     this.documentId,
     this.userId,
+    this.userName,
     this.status,
-    this.toDevice,
-    this.fromDevice,
   });
 
   factory Chat.fromJson(Map<String, dynamic> json) => Chat(
         documentId: json["document_id"],
         userId: json["userId"],
+        userName: json["user_name"],
         status: json["status"],
-        toDevice: json["toDevice"],
-        fromDevice: json["fromDevice"],
       );
 
   Map<String, dynamic> toJson() => {
         "document_id": documentId,
         "userId": userId,
+        "user_name": userName,
         "status": status,
-        "toDevice": toDevice,
-        "fromDevice": fromDevice,
       };
 }
